@@ -9,7 +9,7 @@ class Vehicle {
     // vitesse maximale du véhicule
     this.maxSpeed = 10;
     // force maximale appliquée au véhicule
-    this.maxForce = 0.25;
+    this.maxForce = 0.9;
     // rayon du véhicule
     this.r = 16;
   }
@@ -19,7 +19,7 @@ class Vehicle {
     this.applyForce(force);
   }
   // seek est une méthode qui permet de faire se rapprocher le véhicule de la cible passée en paramètre
-  seek(target) {
+  seek(target, flee=false) {
     // on calcule la direction vers la cible
     // C'est l'ETAPE 1 (action : se diriger vers une cible)
     let force = p5.Vector.sub(target, this.pos);
@@ -29,6 +29,11 @@ class Vehicle {
     force.setMag(this.maxSpeed);
 
     // Si on s'arrête ici, force = desiredSpeed
+    if(flee) {
+      // Pour flee, il faut inverser cette vitesse !
+      force.mult(-1);
+    }
+
 
     // on calcule maintenant force = desiredSpeed - currentSpeed
     force.sub(this.vel);
@@ -37,9 +42,11 @@ class Vehicle {
     return force;
   }
 
+  // flee est une méthode qui permet de fuir la cible passée en paramètres
   flee(target) {
     // inverse de seek !
-    return this.seek(target).mult(-1);
+    let flee = true;
+    return this.seek(target, flee);
   }
 
   // applyForce est une méthode qui permet d'appliquer une force au véhicule
@@ -80,7 +87,8 @@ class Vehicle {
     // et on le tourne. heading() renvoie l'angle du vecteur vitesse (c'est l'angle du véhicule)
     rotate(this.vel.heading());
 
-    // Dessin d'un véhicule sous la forme d'un triangle. Comme s'il était droit, avec le 0, 0 en haut à gauche
+    // Dessin d'un véhicule sous la forme d'un triangle. 
+    // Comme s'il était droit, avec le 0, 0 en haut à gauche
     triangle(-this.r, -this.r / 2, -this.r, this.r / 2, this.r, 0);
     // Que fait cette ligne ?
     //this.edges();
@@ -126,13 +134,27 @@ class Vehicle {
 class Target extends Vehicle {
   constructor(x, y) {
     super(x, y);
-    this.vel = createVector(random(4, 8), random(4, 8));
+    this.vel = createVector(random(1, 2), random(1, 2));
+    this.vel.limit(this.maxSpeed);
   }
 
   show() {
-    fill("green");
+    fill("yellow");
     noStroke();
-    circle(this.pos.x, this.pos.y, 32);
+    this.r = 68;
+    circle(this.pos.x, this.pos.y, this.r*2);
+  }
+
+  update() {
+    super.update();
+
+    if(this.pos.y > height || this.pos.y < 0) {
+      this.vel.y *= -1;
+    }
+
+    if(this.pos.x > width || this.pos.x < 0) {
+      this.vel.x *= -1;
+    }
   }
 
 }
