@@ -7,8 +7,13 @@ function setup() {
   createCanvas(windowWidth, windowHeight);
   pursuer = new Vehicle(random(width), random(height));
   target = new Target(random(width), random(height));
-  target.maxSpeed = 3;
-  pursuer.maxSpeed = 5;
+  target.maxSpeed = 6;
+  target.maxForce = 0.1
+
+  pursuer.maxSpeed = 6;
+  pursuer.maxForce = 0.2
+  
+
   // min max value step
   sliderDistancePrediction = createSlider(2, 50, 10, 1);
 
@@ -27,7 +32,9 @@ function draw() {
   } else {
     // ils ralentissent et se reposent...
     //pursuer.vel.mult(0.99);
-    target.vel.mult(0.99);
+    // Cat tired! Cat and mouse slow down
+    pursuer.applyForce( pursuer.vel.copy().mult(-0.01) )
+    target.applyForce( target.vel.copy().mult(-0.01) )
   }
 
   // déplacement et dessin du véhicule et de la target
