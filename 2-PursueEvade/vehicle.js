@@ -14,10 +14,8 @@ class Vehicle {
     this.r = 16;
   }
 
-  /*
-   seek est une méthode qui permet de faire se rapprocher le véhicule de la cible passée en paramètre
-   */
-    seek(target) {
+  // seek est une méthode qui permet de faire se rapprocher le véhicule de la cible passée en paramètre
+  seek(target, flee=false) {
     // on calcule la direction vers la cible
     // C'est l'ETAPE 1 (action : se diriger vers une cible)
     let force = p5.Vector.sub(target, this.pos);
@@ -25,17 +23,26 @@ class Vehicle {
     // Dessous c'est l'ETAPE 2 : le pilotage (comment on se dirige vers la cible)
     // on limite ce vecteur à la longueur maxSpeed
     force.setMag(this.maxSpeed);
-    // on calcule la force à appliquer pour atteindre la cible
+
+    // Si on s'arrête ici, force = desiredSpeed
+    if(flee) {
+      // Pour flee, il faut inverser cette vitesse !
+      force.mult(-1);
+    }
+
+
+    // on calcule maintenant force = desiredSpeed - currentSpeed
     force.sub(this.vel);
-    // on limite cette force à la longueur maxForce
+    // et on limite cette force à la longueur maxForce
     force.limit(this.maxForce);
-    // on applique la force au véhicule
     return force;
   }
 
-  // inverse de seek !
+  // flee est une méthode qui permet de fuir la cible passée en paramètres
   flee(target) {
-    return this.seek(target.pos).mult(-1);
+    // inverse de seek !
+    let flee = true;
+    return this.seek(target, flee);
   }
 
   /* Poursuite d'un point devant la target !
@@ -57,8 +64,7 @@ class Vehicle {
     let v = p5.Vector.sub(prediction, target.pos);
     this.drawVector(target.pos, v);
 
-
-    // 2 - dessin d'un cercle vert de rayon 16 pour voir ce point
+    // 2 - dessin d'un cercle vert de rayon 20 pour voir ce point
     fill("green");
     circle(prediction.x, prediction.y, 20);
 
@@ -73,8 +79,7 @@ class Vehicle {
      cette methode renvoie la force à appliquer au véhicule
   */
   evade(target) {
-    let force = this.pursue(target);
-    return(force.mult(-1));
+    // TODO
   }
 
   // applyForce est une méthode qui permet d'appliquer une force au véhicule
