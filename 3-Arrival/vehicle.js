@@ -3,27 +3,57 @@ class Vehicle {
     this.pos = createVector(x, y);
     this.vel = createVector(0, 0);
     this.acc = createVector(0, 0);
-    this.maxSpeed = 20;
-    this.maxForce = 0.4;
+    this.maxSpeed = 10;
+    this.maxForce = 0.9;
     this.r = 16;
     this.rayonZoneDeFreinage = 200;
   }
 
-  evade(vehicle) {
-    let pursuit = this.pursue(vehicle);
-    pursuit.mult(-1);
-    return pursuit;
-  }
-
-  pursue(vehicle) {
-    let target = vehicle.pos.copy();
-    let prediction = vehicle.vel.copy();
-    prediction.mult(10);
-    target.add(prediction);
-    fill(0, 255, 0);
-    circle(target.x, target.y, 16);
-    return this.seek(target);
-  }
+ /* Poursuite d'un point devant la target !
+     cette methode renvoie la force à appliquer au véhicule
+  */
+     pursue(target, evade=false) {
+      // TODO
+      // 1 - calcul de la position future de la cible
+      // on fait une copie de la position de la target
+      // 2 - On calcule un vecteur colinéaire au vecteur vitesse de la cible,
+      let prediction = target.vel.copy();
+      // et on le multiplie par 10 (10 frames)
+      // 3 - prediction dans 10 frames = 10 fois la longueur du vecteur
+      
+      // target.distancePrediction varie en fonction de
+      // la distance entre le véhicule et la cible
+      // plus la cible est loin, plus on prédit loin
+  
+      prediction.mult(target.distancePrediction);
+      // 4 - on positionne de la target au bout de ce vecteur
+      prediction.add(target.pos);
+  
+  
+      console.log("target distance prediction", target.distancePrediction)
+      // dessin du vecteur prediction
+      let v = p5.Vector.sub(prediction, target.pos);
+      this.drawVector(target.pos, v);
+  
+      // 2 - dessin d'un cercle vert de rayon 20 pour voir ce point
+      fill("green");
+      circle(prediction.x, prediction.y, 20);
+  
+      // 3 - appel à seek avec ce point comme cible 
+      let force = this.seek(prediction, evade);
+  
+      // n'oubliez pas, on renvoie la force à appliquer au véhicule !
+      return force;
+    }
+  
+    /* inverse de pursue
+       cette methode renvoie la force à appliquer au véhicule
+    */
+    evade(target) {
+      let evade = true;
+      return this.pursue(target, evade);
+    }
+  
 
   arrive(target) {
     // 2nd argument true enables the arrival behavior
@@ -50,16 +80,24 @@ class Vehicle {
       // entre nouvelleValeurMin et nouvelleValeurMax
 
       // TODO !
+      // Approche expérimentale
+      // on ajuste le rayon en fonction de la vitesse du véhicule
+      //console.log(this.vel.mag());
+      //this.rayonZoneDeFreinage = this.vel.mag()*30;
 
-      // 1 - dessiner le cercle de rayon 100 autour du véhicule
+      // 1 - dessiner le cercle de rayon 50 autour du vehicule
+      stroke("white");
+      noFill();
+      circle(this.pos.x, this.pos.y, this.rayonZoneDeFreinage);
 
-      // 2 - calcul de la distance entre la cible et le véhicule
+      // 2 - calcul de la distance entre la cible et le vehicule
+      let distance = p5.Vector.dist(this.pos, target);
 
       // 3 - si distance < rayon du cercle, alors on modifie desiredSPeed
       // qui devient inversement proportionnelle à la distance.
       // si d = rayon alors desiredSpeed = maxSpeed
       // si d = 0 alors desiredSpeed = 0
-
+      desiredSpeed = map(distance, 0, this.rayonZoneDeFreinage, 0, this.maxSpeed);
     }
 
     force.setMag(desiredSpeed);

@@ -1,4 +1,5 @@
 let vehicle;
+let vehicles = [];
 
 function setup() {
   createCanvas(800, 800);
