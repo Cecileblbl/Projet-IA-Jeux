@@ -12,6 +12,9 @@ class Vehicle {
     this.maxForce = 0.25;
     // rayon du véhicule
     this.r = 16;
+
+    // Pour comportement poursuite
+    this.distancePrediction = 10;
   }
 
   // seek est une méthode qui permet de faire se rapprocher le véhicule de la cible passée en paramètre
@@ -48,7 +51,7 @@ class Vehicle {
   /* Poursuite d'un point devant la target !
      cette methode renvoie la force à appliquer au véhicule
   */
-  pursue(target) {
+  pursue(target, evade=false) {
     // TODO
     // 1 - calcul de la position future de la cible
     // on fait une copie de la position de la target
@@ -56,10 +59,17 @@ class Vehicle {
     let prediction = target.vel.copy();
     // et on le multiplie par 10 (10 frames)
     // 3 - prediction dans 10 frames = 10 fois la longueur du vecteur
-    prediction.mult(10);
+    
+    // target.distancePrediction varie en fonction de
+    // la distance entre le véhicule et la cible
+    // plus la cible est loin, plus on prédit loin
+
+    prediction.mult(target.distancePrediction);
     // 4 - on positionne de la target au bout de ce vecteur
     prediction.add(target.pos);
 
+
+    console.log("target distance prediction", target.distancePrediction)
     // dessin du vecteur prediction
     let v = p5.Vector.sub(prediction, target.pos);
     this.drawVector(target.pos, v);
@@ -69,7 +79,7 @@ class Vehicle {
     circle(prediction.x, prediction.y, 20);
 
     // 3 - appel à seek avec ce point comme cible 
-    let force = this.seek(prediction);
+    let force = this.seek(prediction, evade);
 
     // n'oubliez pas, on renvoie la force à appliquer au véhicule !
     return force;
@@ -79,9 +89,27 @@ class Vehicle {
      cette methode renvoie la force à appliquer au véhicule
   */
   evade(target) {
-    // TODO
+    let evade = true;
+    return this.pursue(target, evade);
   }
 
+  pursuePerfect(vehicle) {
+    // Use the Law of Sines (https://en.wikipedia.org/wiki/Law_of_sines)
+    // to predict the right collision point
+    const speed_ratio = vehicle.vel.mag() / this.maxSpeed;
+    const target_angle = vehicle.vel.angleBetween(p5.Vector.sub(this.pos, vehicle.pos));
+    const my_angle = asin(sin(target_angle) * speed_ratio);
+    const dist = this.pos.dist(vehicle.pos);
+    const prediction = dist * sin(my_angle) / sin(PI - my_angle - target_angle);
+    const target = vehicle.vel.copy().setMag(prediction).add(vehicle.pos);
+    
+    this.drawVector(vehicle.pos, p5.Vector.mult(vehicle.vel, 20), 'red');
+    this.drawVector(this.pos, p5.Vector.sub(target, this.pos), 'green');
+    
+    fill(0, 255, 0);
+    circle(target.x, target.y, 8);
+    return this.seek(target);
+  }
   // applyForce est une méthode qui permet d'appliquer une force au véhicule
   // en fait on additionne le vecteurr force au vecteur accélération
   applyForce(force) {
@@ -130,11 +158,11 @@ class Vehicle {
     this.drawVector(this.pos, this.vel.copy().mult(10));
   }
 
-  drawVector(pos, v) {
+  drawVector(pos, v, color="red") {
     push();
     // Dessin du vecteur depuis pos comme origne
     strokeWeight(3);
-    stroke(255, 0, 0);
+    stroke(color);
     line(pos.x, pos.y, pos.x + v.x, pos.y + v.y);
     // dessine une petite fleche au bout du vecteur vitesse
     let arrowSize = 5;
