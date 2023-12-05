@@ -1,4 +1,6 @@
 class Vehicle {
+  static debug = false;
+
   constructor(x, y) {
     this.pos = createVector(x, y);
     this.vel = createVector(0, 0);
@@ -6,7 +8,7 @@ class Vehicle {
     this.maxSpeed = 10;
     this.maxForce = 0.9;
     this.r = 16;
-    this.rayonZoneDeFreinage = 200;
+    this.rayonZoneDeFreinage = 100;
   }
 
  /* Poursuite d'un point devant la target !
@@ -55,16 +57,16 @@ class Vehicle {
     }
   
 
-  arrive(target) {
+  arrive(target, distanceVisee = 0) {
     // 2nd argument true enables the arrival behavior
-    return this.seek(target, true);
+    return this.seek(target, true, distanceVisee);
   }
 
   flee(target) {
     // recopier code de flee de l'exemple précédent
   }
 
-  seek(target, arrival = false) {
+  seek(target, arrival = false, distanceVisee=0) {
     let force = p5.Vector.sub(target, this.pos);
     let desiredSpeed = this.maxSpeed;
     
@@ -86,10 +88,12 @@ class Vehicle {
       //this.rayonZoneDeFreinage = this.vel.mag()*30;
 
       // 1 - dessiner le cercle de rayon 50 autour du vehicule
-      stroke("white");
-      noFill();
-      circle(this.pos.x, this.pos.y, this.rayonZoneDeFreinage);
-
+      if(Vehicle.debug) {
+        stroke("white");
+        noFill();
+        circle(this.pos.x, this.pos.y, this.rayonZoneDeFreinage);  
+      }
+    
       // 2 - calcul de la distance entre la cible et le vehicule
       let distance = p5.Vector.dist(this.pos, target);
 
@@ -97,7 +101,7 @@ class Vehicle {
       // qui devient inversement proportionnelle à la distance.
       // si d = rayon alors desiredSpeed = maxSpeed
       // si d = 0 alors desiredSpeed = 0
-      desiredSpeed = map(distance, 0, this.rayonZoneDeFreinage, 0, this.maxSpeed);
+      desiredSpeed = map(distance, distanceVisee, this.rayonZoneDeFreinage+distanceVisee, 0, this.maxSpeed);
     }
 
     force.setMag(desiredSpeed);
