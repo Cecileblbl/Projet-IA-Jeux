@@ -12,6 +12,9 @@ function setup() {
   path = createVector(200, 60);
 }
 
+// prend deux vecteurs a et b en paramètres
+// et calcule la projection perpendiculaire 
+// de l'extremite de a sur b
 function vectorProjection(a, b) {
   let bCopy = b.copy().normalize();
   
