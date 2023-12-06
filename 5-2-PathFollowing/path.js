@@ -11,7 +11,7 @@ class Path {
       strokeWeight(2);
       line(this.start.x, this.start.y, this.end.x, this.end.y);
   
-      stroke(255, 100);
+      stroke(255, 50);
       strokeWeight(this.radius * 2);
       line(this.start.x, this.start.y, this.end.x, this.end.y);
     }
