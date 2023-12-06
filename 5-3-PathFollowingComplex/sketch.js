@@ -20,7 +20,7 @@ let path;
 let vehicles = [];
 
 function setup() {
-  createCanvas(1200, 800);
+  createCanvas(windowWidth, windowHeight);
   // la fonction suivante créer un chemin composé de plusieurs points
   newPath();
 
@@ -45,6 +45,10 @@ function draw() {
     v.applyBehaviors(vehicles, path);
     // on a regroupé update, draw etc. dans une méthode run (update, borders, display, etc.)
     v.run();
+
+    if(v.couleur == "green") {
+      v.edges();
+    }
   }
 }
 
@@ -53,7 +57,10 @@ function newPath() {
   path = new Path();
   let offset = 30;
   path.addPoint(offset, offset);
-  path.addPoint(width - offset, offset);
+  path.addPoint(width - offset-300, offset+300);
+  path.addPoint(400, 300);
+  path.addPoint(width/2, height/2);
+  path.addPoint(400, 800);
   path.addPoint(width - offset, height - offset);
   path.addPoint(width / 2, height - offset * 3);
   path.addPoint(offset, height - offset);
@@ -67,12 +74,37 @@ function newVehicle(x, y) {
   return v;
 }
 
+function newVehicleRapide(x, y) {
+  let maxspeed = 8
+  let maxforce = 0.3;
+  let v = new Vehicle(x, y, maxspeed, maxforce);
+  v.couleur = "red";
+  vehicles.push(v);
+  return v;
+}
+
+function newVehicleWanderer(x, y) {
+  let maxspeed = 3;
+  let maxforce = 0.3;
+  let v = new Vehicle(x, y, maxspeed, maxforce);
+  v.couleur = "green";
+  v.r = 30;
+  v.poidsSeparation = 2;
+  v.poidsWander = 1;
+  vehicles.push(v);
+  return v;
+}
+
 function keyPressed() {
   if (key == "d") {
     debug = !debug;
+  } else if (key == "s") {
+    newVehicleRapide(width / 2, height / 2);
+  } else if (key == "w") {
+    newVehicleWanderer(width / 2, height / 2);
   }
 }
 
-function mousePressed() {
+function mouseDragged() {
   newVehicle(mouseX, mouseY);
 }
