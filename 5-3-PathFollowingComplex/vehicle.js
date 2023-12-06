@@ -21,22 +21,50 @@ class Vehicle {
     this.velocity = createVector(this.maxspeed, 0);
     this.couleur = "black";
 
-    this.path = [];
+    // Pour apply behaviors
+    this.poidsSuiviChemin = 1;
+    this.poidsSeparation = 2;
+    this.poidsWander = 1;
+
+    // pour comportement wander
+    this.wanderTheta = 0;
+    this.wanderRadius = 50;
+    this.displaceRange = 0.05;
+    this.distanceCercleWander = 300;
+
+    this.cheminDerriereWanderer = [];
+    this.longueurMaxiCheminDerriere = 50;
   }
 
   // Implémente deux comportements : suivi de chemin complexe et séparation
   // que l'on verra plus tard
   applyBehaviors(vehicles, path) {
-    // Suivi de chemin, le résultat est la force f
-    let f = this.follow(path);
-    // separation des autres véhicules, le resultat est la force s
-    let s = this.separate(vehicles);
-    // On fait une somme pondérée des deux forces
-    f.mult(2);
-    s.mult(3); // essayez zéro ici !!!!
-    // On applique les forces au véhicule
-    this.applyForce(f);
-    this.applyForce(s);
+    // Pour les vehicules standards, on applique 
+    // les comportement follow et separate,
+    // pour les wanderers, juste wander et separate
+
+    if (this.couleur !== "green") {
+      // Suivi de chemin, le résultat est la force f
+      let forceSuiviChemin = this.follow(path);
+      // separation des autres véhicules, le resultat est la force s
+      let forceSeparation = this.separate(vehicles);
+      // On fait une somme pondérée des deux forces
+      forceSuiviChemin.mult(this.poidsSuiviChemin);
+      forceSeparation.mult(this.poidsSeparation); // essayez zéro ici !!!!
+      // On applique les forces au véhicule
+      this.applyForce(forceSuiviChemin);
+      this.applyForce(forceSeparation);
+    } else {
+      // on a affaire à un wanderer
+      let forceWander = this.wander();
+      let forceSeparation = this.separate(vehicles);
+
+      forceWander.mult(this.poidsWander);
+      forceSeparation.mult(this.poidsSeparation);
+
+      this.applyForce(forceWander);
+      this.applyForce(forceSeparation);
+    }
   }
 
   applyForce(force) {
@@ -52,6 +80,67 @@ class Vehicle {
   run() {
     this.update();
     this.render();
+  }
+
+  wander() {
+    // point devant le véhicule
+    let wanderPoint = this.velocity.copy();
+    wanderPoint.setMag(this.distanceCercleWander);
+    wanderPoint.add(this.position);
+
+    if (Vehicle.debug) {
+      // on le dessine sous la forme d'une petit cercle rouge
+      fill(255, 0, 0);
+      noStroke();
+      circle(wanderPoint.x, wanderPoint.y, 8);
+
+      // Cercle autour du point
+      noFill();
+      stroke(255);
+      circle(wanderPoint.x, wanderPoint.y, this.wanderRadius * 2);
+
+      // on dessine une lige qui relie le vaisseau à ce point
+      // c'est la ligne blanche en face du vaisseau
+      line(this.position.x, this.position.y, wanderPoint.x, wanderPoint.y);
+    }
+    // On va s'occuper de calculer le point vert SUR LE CERCLE
+    // il fait un angle wanderTheta avec le centre du cercle
+    // l'angle final par rapport à l'axe des X c'est l'angle du vaisseau
+    // + cet angle
+    let theta = this.wanderTheta + this.velocity.heading();
+
+    let x = this.wanderRadius * cos(theta);
+    let y = this.wanderRadius * sin(theta);
+
+    // maintenant wanderPoint c'est un point sur le cercle
+    wanderPoint.add(x, y);
+
+    if (Vehicle.debug) {
+      // on le dessine sous la forme d'un cercle vert
+      fill("green");
+      noStroke();
+      circle(wanderPoint.x, wanderPoint.y, 16);
+
+      // on dessine le vecteur desiredSpeed qui va du vaisseau au point vert
+      stroke("yellow");
+      line(this.position.x, this.position.y, wanderPoint.x, wanderPoint.y);
+    }
+    // On a donc la vitesse désirée que l'on cherche qui est le vecteur
+    // allant du vaisseau au cercle vert. On le calcule :
+    // ci-dessous, steer c'est la desiredSpeed directement !
+    let desiredSpeed = wanderPoint.sub(this.position);
+
+    // Ce que dit Craig Reynolds, c'est que uniquement pour ce
+    // comportement, la force à appliquer au véhicule est
+    // desiredSpeed et pas desiredSpeed - vitesse actuelle !
+    let force = desiredSpeed;
+
+    force.setMag(this.maxForce);
+
+    // On déplace le point vert sur le cerlcle (en radians)
+    this.wanderTheta += random(-this.displaceRange, this.displaceRange);
+
+    return force;
   }
 
   // This function implements Craig Reynolds' path following algorithm
@@ -199,12 +288,14 @@ class Vehicle {
     // Reset accelertion to 0 each cycle
     this.acceleration.mult(0);
 
-    // on rajoute la position courante dans le tableau
-    this.path.push(this.position.copy());
+    if (this.couleur == "green") {
+      // on rajoute la position courante dans le tableau
+      this.cheminDerriereWanderer.push(this.position.copy());
 
-    // si le tableau a plus de 50 éléments, on vire le plus ancien
-    if(this.path.length > this.pathMaxLength) {
-      this.path.shift();
+      // si le tableau a plus de 50 éléments, on vire le plus ancien
+      if (this.cheminDerriereWanderer.length > this.longueurMaxiCheminDerriere) {
+        this.cheminDerriereWanderer.shift();
+      }
     }
   }
 
@@ -224,6 +315,7 @@ class Vehicle {
   }
 
   render() {
+    if (this.couleur !== "green") {
       // Simple boid is just a circle
       fill(this.couleur);
       stroke(0);
@@ -231,6 +323,33 @@ class Vehicle {
       translate(this.position.x, this.position.y);
       ellipse(0, 0, this.r, this.r);
       pop();
+
+
+    } else {
+      // Wanderer
+      this.drawPath();
+
+      fill(this.couleur);
+      stroke(0);
+      push();
+      translate(this.position.x, this.position.y);
+      rotate(this.velocity.heading());
+      triangle(-this.r, -this.r / 2, -this.r, this.r / 2, this.r, 0);
+      pop();
+
+
+    }
+  }
+
+  drawPath() {
+    // dessin du chemin
+    this.cheminDerriereWanderer.forEach((p, index) => {
+      if (!(index % 3)) {
+        stroke(0);
+        noFill();
+        circle(p.x, p.y, 1);
+      }
+    });
   }
 
   edges() {
