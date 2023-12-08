@@ -33,7 +33,7 @@ class Vehicle {
     // à peu près en secondes
     this.dureeDeVie = 5;
 
-    this.r_pourDessin = 24;
+    this.r_pourDessin = 16;
     // rayon du véhicule pour l'évitement
     this.r = this.r_pourDessin * 3;
 
@@ -481,13 +481,13 @@ class Vehicle {
 
     // dessin de l'image du vaisseau
     push();
-    rotate(PI/2);
     imageMode(CENTER);
-    image(this.imageVaisseau, 0, 0, this.r_pourDessin*2, this.r_pourDessin*2);
+    rotate(PI/2);
+    image(this.imageVaisseau, 0, 0, this.r_pourDessin * 2, this.r_pourDessin * 2);
     pop();
    
     // Dessin d'un véhicule sous la forme d'un triangle. Comme s'il était droit, avec le 0, 0 en haut à gauche
-   // triangle(-this.r_pourDessin, -this.r_pourDessin / 2, -this.r_pourDessin, this.r_pourDessin / 2, this.r_pourDessin, 0);
+    //triangle(-this.r_pourDessin, -this.r_pourDessin / 2, -this.r_pourDessin, this.r_pourDessin / 2, this.r_pourDessin, 0);
     // Que fait cette ligne ?
     //this.edges();
 
