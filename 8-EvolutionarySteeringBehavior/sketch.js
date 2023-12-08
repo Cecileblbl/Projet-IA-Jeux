@@ -15,7 +15,7 @@ const poison = [];
 let debug;
 
 function setup() {
-  createCanvas(640, 360);
+  createCanvas(windowWidth, windowHeight - 50);
   for (let i = 0; i < 50; i++) {
     const x = random(width);
     const y = random(height);
@@ -74,10 +74,12 @@ function draw() {
     vehicles[i].behaviors(food, poison);
     vehicles[i].update();
     vehicles[i].display();
+
     const newVehicle = vehicles[i].clone();
     if (newVehicle != null) {
       vehicles.push(newVehicle);
     }
+    
     if (vehicles[i].dead()) {
       const x = vehicles[i].position.x;
       const y = vehicles[i].position.y;
