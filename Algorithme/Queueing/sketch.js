@@ -1,6 +1,7 @@
 let pursuer1, pursuer2;
 let target;
 let obstacles = [];
+let walls = [];
 let vehicules = [];
 
 let imgVaisseau;
@@ -23,8 +24,8 @@ function setup() {
   // un cercle de rayon 100px
   // TODO
   obstacles.push(new Obstacle(width / 2, height / 2, 50));
-  obstacles.push(new Wall(width / 1.1, 0, 100, height / 2.2));
-  obstacles.push(new Wall(width / 1.1, height / 2.2 + 40, 100, height / 2));
+  walls.push(new Wall(width / 1.1, 0, 100, height / 2.2));
+  walls.push(new Wall(width / 1.1, height / 2.2 + 40, 100, height / 2));
 
   target = createVector(width, height / 2);
 }
@@ -42,6 +43,11 @@ function draw() {
   // dessin des obstacles
   obstacles.forEach((o) => {
     o.show();
+  });
+
+  // dessin des murs
+  walls.forEach((w) => {
+    w.show();
   });
 
   vehicules.forEach((v) => {

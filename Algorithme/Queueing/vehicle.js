@@ -53,6 +53,7 @@ class Vehicle {
     let avoidForceObstacles = this.avoid(obstacles);
     //let avoidForceVehicules = this.avoidVehicules(vehicules);
     let separationForce = this.separate(vehicules);
+    let avoidForceWalls = this.avoid(walls);
 
     // force de répulsion sur les bords du canvas
     // utile pour coder le "containment": le fait de ne pas sortir d'une zone
@@ -70,7 +71,10 @@ class Vehicle {
     this.applyForce(avoidForceObstacles);
     // this.applyForce(avoidForceVehicules);
     this.applyForce(separationForce);
+    this.applyForce(avoidForceWalls);
   }
+
+  avoidWalls(murs) {}
 
   // Méthode d'évitement d'obstacle, implémente le comportement avoid
   // renvoie une force (un vecteur) pour éviter l'obstacle
@@ -323,26 +327,6 @@ class Vehicle {
         if (distance < plusPetiteDistance) {
           plusPetiteDistance = distance;
           obstacleLePlusProche = o.pos;
-        }
-      } else if (o instanceof Wall) {
-        let topLeft = createVector(o.x, o.y);
-        let topRight = createVector(o.x + o.width, o.y);
-        let bottomLeft = createVector(o.x, o.y + o.height);
-        let bottomRight = createVector(o.x + o.width, o.y + o.height);
-
-        //Tableau pour stocker les coins
-        let corners = [topLeft, topRight, bottomLeft, bottomRight];
-
-        // Trouver le coin le plus proche
-        let closestCorner = corners[0];
-
-        for (let i = 1; i < corners.length; i++) {
-          let distance = this.pos.dist(corners[i]);
-          if (distance < plusPetiteDistance) {
-            plusPetiteDistance = distance;
-            closestCorner = corners[i];
-            obstacleLePlusProche = closestCorner;
-          }
         }
       }
     });
