@@ -57,7 +57,7 @@ function draw() {
 
   vehicules.forEach((v) => {
     // pursuer = le véhicule poursuiveur, il vise un point devant la cible
-    v.applyBehaviors(target, obstacles, vehicules);
+    v.applyBehaviors(target, obstacles, vehicules, walls);
 
     // déplacement et dessin du véhicule et de la target
     v.update();
