@@ -1,19 +1,15 @@
 class Wall {
-  constructor(x, y, w, h) {
-    this.pos = createVector(x, y);
-    this.width = w;
-    this.height = h;
+  constructor(x1, y1, x2, y2) {
+    this.start = createVector(x1, y1);
+    this.end = createVector(x2, y2);
     this.color = color(155);
   }
 
   show() {
     push();
-    fill(this.color);
-    stroke(0);
+    stroke(this.color);
     strokeWeight(3);
-    rect(this.pos.x, this.pos.y, this.width, this.height);
-    fill(0);
-    ellipse(this.pos.x, this.pos.y, 10);
+    line(this.start.x, this.start.y, this.end.x, this.end.y);
     pop();
   }
 }

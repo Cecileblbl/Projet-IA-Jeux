@@ -53,7 +53,7 @@ class Vehicle {
     let avoidForceObstacles = this.avoid(obstacles);
     //let avoidForceVehicules = this.avoidVehicules(vehicules);
     let separationForce = this.separate(vehicules);
-    let avoidForceWalls = this.avoid(walls);
+    let avoidForceWalls = this.avoidWalls(walls);
 
     // force de répulsion sur les bords du canvas
     // utile pour coder le "containment": le fait de ne pas sortir d'une zone
@@ -62,10 +62,11 @@ class Vehicle {
     // width, height : largeur et hauteur du rectangle
     // d : distance à partir de laquelle on est repoussé
 
-    seekForce.mult(0.2);
+    seekForce.mult(0.3);
     avoidForceObstacles.mult(0.9);
     // avoidForceVehicules.mult(0);
     separationForce.mult(0.9);
+    avoidForceWalls.mult(0.9);
 
     this.applyForce(seekForce);
     this.applyForce(avoidForceObstacles);
@@ -73,8 +74,27 @@ class Vehicle {
     this.applyForce(separationForce);
     this.applyForce(avoidForceWalls);
   }
+  avoidWalls(walls) {
+    // Maximum distance to consider for avoiding walls
+    let worldrecord = 1000000;
+    let avoidanceDistance = 50;
+    // Force to avoid walls
+    let avoidanceForce = createVector();
 
-  avoidWalls(murs) {}
+    for (let wall of walls) {
+      // Calculate the closest point on the wall
+      let wallStart = createVector(wall.x1, wall.y1);
+      let wallEnd = createVector(wall.x2, wall.y2);
+      let closestPoint = findProjection(wallStart, this.pos, wallEnd);
+      let distance = p5.Vector.dist(this.pos, closestPoint);
+      if (distance < worldrecord && distance < avoidanceDistance) {
+        worldrecord = distance;
+        avoidanceForce = p5.Vector.sub(closestPoint, this.pos);
+      }
+    }
+
+    return avoidanceForce;
+  }
 
   // Méthode d'évitement d'obstacle, implémente le comportement avoid
   // renvoie une force (un vecteur) pour éviter l'obstacle

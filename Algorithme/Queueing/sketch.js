@@ -24,9 +24,14 @@ function setup() {
   // un cercle de rayon 100px
   // TODO
   obstacles.push(new Obstacle(width / 2, height / 2, 50));
-  walls.push(new Wall(width / 1.1, 0, 100, height / 2.2));
-  walls.push(new Wall(width / 1.1, height / 2.2 + 40, 100, height / 2));
 
+  // Créer le mur de gauche
+  walls.push(new Wall((width / 3) * 2, 0, (width / 3) * 2, height / 3));
+
+  // Créer le mur de droite, en laissant un espace de 100 pixels pour la porte
+  walls.push(
+    new Wall((width / 3) * 2, height / 3 + 100, (width / 3) * 2, height)
+  );
   target = createVector(width, height / 2);
 }
 
