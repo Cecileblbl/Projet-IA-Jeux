@@ -43,7 +43,7 @@ function newPath() {
   // A path is a series of connected points
   // A more sophisticated path might be a curve
   path = new Path();
-  let offset = 50;
+  let offset = 40;
   path.addPoint(offset, offset);
   path.addPoint(width - offset, offset);
   path.addPoint(width - offset, height - offset);
