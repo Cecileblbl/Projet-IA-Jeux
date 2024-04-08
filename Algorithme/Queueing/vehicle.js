@@ -45,7 +45,7 @@ class Vehicle {
     // vitesse maximale du véhicule
     this.maxSpeed = 1;
     // force maximale appliquée au véhicule
-    this.maxForce = 3;
+    this.maxForce = 1;
     this.color = "white";
     // à peu près en secondes
     this.dureeDeVie = 5;
@@ -80,10 +80,10 @@ class Vehicle {
     // d : distance à partir de laquelle on est repoussé
 
     seekForce.mult(0.3);
-    avoidForceObstacles.mult(0.9);
+    avoidForceObstacles.mult(0.5);
     // avoidForceVehicules.mult(0);
     separationForce.mult(0.9);
-    avoidForceWalls.mult(0.9);
+    avoidForceWalls.mult(0.5);
 
     this.applyForce(seekForce);
     this.applyForce(avoidForceObstacles);
@@ -147,7 +147,7 @@ class Vehicle {
 
           // calcul de la force d'évitement. C'est un vecteur qui va
           // du centre de l'obstacle vers le point au bout du vecteur ahead
-          avoidanceForce = p5.Vector.sub(closestPoint, pointAhead);
+          avoidanceForce = p5.Vector.sub(pointAhead, closestPoint);
         }
       }
     }
