@@ -78,9 +78,9 @@ function keyPressed() {
     Vehicle.debug = !Vehicle.debug;
   }
   if (key == "f") {
-    // Je cree 100 vehicules qui partent du bord gauche de l'écran
+    // Je cree 10 vehicules qui partent du bord gauche de l'écran
     // et qui vont vers la cible/souris
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < 2; i++) {
       let v = new Vehicle(
         random(150, 170),
         random(height / 2 - 10, height / 2 + 10),

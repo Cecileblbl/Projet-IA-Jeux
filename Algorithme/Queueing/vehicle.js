@@ -26,9 +26,9 @@ class Vehicle {
     // accélération du véhicule
     this.acc = createVector(0, 0);
     // vitesse maximale du véhicule
-    this.maxSpeed = 2;
+    this.maxSpeed = 1;
     // force maximale appliquée au véhicule
-    this.maxForce = 0.7;
+    this.maxForce = 3;
     this.color = "white";
     // à peu près en secondes
     this.dureeDeVie = 5;
@@ -39,7 +39,7 @@ class Vehicle {
 
     // Pour évitement d'obstacle
     this.largeurZoneEvitementDevantVaisseau = this.r / 2;
-    this.distanceAhead = 30;
+    this.distanceAhead = 50;
 
     // chemin derrière vaisseaux
     this.path = [];
@@ -78,7 +78,7 @@ class Vehicle {
   avoidWalls(walls) {
     // Maximum distance to consider for avoiding walls
     let worldrecord = 1000000;
-    let avoidanceDistance = 50;
+    let avoidanceDistance = 540;
 
     // Force to avoid walls
     let ahead = this.vel.copy();
@@ -86,7 +86,7 @@ class Vehicle {
 
     let pointAhead = p5.Vector.add(this.pos, ahead);
 
-    // Calcule de ahead2, deux fois plus petit que le premier
+    // Calcul de ahead2, deux fois plus petit que le premier
     let ahead2 = ahead.copy();
     ahead2.mult(0.5);
     let pointAuBoutDeAhead2 = p5.Vector.add(this.pos, ahead2);
@@ -98,41 +98,44 @@ class Vehicle {
       let wallStart = createVector(wall.x1, wall.y1);
       let wallEnd = createVector(wall.x2, wall.y2);
       point = findProjection(this.pos, wallStart, wallEnd);
-      let distance = this.pos.dist(closestPoint);
+      let distance = this.pos.dist(point);
+      console.log("distance", distance);
       if (distance < worldrecord && distance < avoidanceDistance) {
         worldrecord = distance;
         closestPoint = point;
       }
+      if (closestPoint != null) {
+        console.log("avoiding wall");
+        let distance1 = closestPoint.dist(pointAhead);
+        let distance2 = closestPoint.dist(pointAuBoutDeAhead2);
+        let distance3 = closestPoint.dist(this.pos);
 
-      let distance1 = closestPoint.dist(pointAhead);
-      let distance2 = closestPoint.dist(pointAhead2);
-      let distance3 = closestPoint.dist(this.pos);
+        let plusPetiteDistance = min(distance1, distance2);
+        plusPetiteDistance = min(plusPetiteDistance, distance3);
 
-      let plusPetiteDistance = min(distance, distance2);
-      plusPetiteDistance = min(plusPetiteDistance, distance3);
+        let pointLePlusProcheDeObstacle = undefined;
 
-      let pointLePlusProcheDeObstacle = undefined;
+        if (distance1 == plusPetiteDistance) {
+          pointLePlusProcheDeObstacle = pointAhead;
+        } else if (distance2 == plusPetiteDistance) {
+          pointLePlusProcheDeObstacle = pointAuBoutDeAhead2;
+        } else if (distance3 == plusPetiteDistance) {
+          pointLePlusProcheDeObstacle = this.pos;
+        }
 
-      if (distance == plusPetiteDistance) {
-        pointLePlusProcheDeObstacle = pointAuBoutDeAhead;
-      } else if (distance2 == plusPetiteDistance) {
-        pointLePlusProcheDeObstacle = pointAuBoutDeAhead2;
-      } else if (distance3 == plusPetiteDistance) {
-        pointLePlusProcheDeObstacle = this.pos;
-      }
+        if (
+          plusPetiteDistance <
+          pointLePlusProcheDeObstacle + this.largeurZoneEvitementDevantVaisseau
+        ) {
+          // collision possible
 
-      if (
-        plusPetiteDistance <
-        closestPoint + this.largeurZoneEvitementDevantVaisseau
-      ) {
-        // collision possible
-
-        // calcul de la force d'évitement. C'est un vecteur qui va
-        // du centre de l'obstacle vers le point au bout du vecteur ahead
-        avoidanceForce = p5.Vector.sub(
-          pointLePlusProcheDeObstacle,
-          closestPoint
-        );
+          // calcul de la force d'évitement. C'est un vecteur qui va
+          // du centre de l'obstacle vers le point au bout du vecteur ahead
+          avoidanceForce = p5.Vector.sub(
+            pointLePlusProcheDeObstacle,
+            closestPoint
+          );
+        }
       }
     }
 
