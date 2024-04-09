@@ -14,21 +14,19 @@ function preload() {
 function setup() {
   console.log("setup");
   createCanvas(windowWidth, windowHeight);
-  pursuer1 = new Vehicle(100, 100, imgVaisseau);
-  pursuer2 = new Vehicle(random(width), random(height), imgVaisseau);
-
-  vehicules.push(pursuer1);
-  vehicules.push(pursuer2);
-
+  for (let i = 0; i < 30; i++) {
+    let x = random(width / 2); // Position aléatoire dans la moitié gauche du canevas
+    let y = random(height); // Position aléatoire sur la hauteur du canevas
+    let vehicule = new Vehicle(x, y, imgVaisseau);
+    vehicules.push(vehicule);
+  }
   // On cree un obstace au milieu de l'écran
   // un cercle de rayon 100px
   // TODO
-  obstacles.push(new Obstacle(width / 2, height / 2, 50));
+  // obstacles.push(new Obstacle(width / 2, height / 2, 50));
 
-  // Créer le mur de gauche
+  // Créer les murs en laissant un espace de 100 pixels pour la porte
   walls.push(new Wall((width / 3) * 2, 0, (width / 3) * 2, height / 3));
-
-  // Créer le mur de droite, en laissant un espace de 100 pixels pour la porte
   walls.push(
     new Wall((width / 3) * 2, height / 3 + 100, (width / 3) * 2, height)
   );
