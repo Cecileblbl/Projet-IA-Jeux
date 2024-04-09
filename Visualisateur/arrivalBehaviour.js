@@ -34,9 +34,44 @@ class ArrivalBehaviour {
       const targetPosition = `Target Position: (${this.target.position.x}, ${this.target.position.y})`;
       text(targetPosition, x, y + 20);
     } else {
-      text("Target Position: None", x, y + 20);
+      button = createButton("Create Target");
+      button.position(x, y + 20);
+      button.mousePressed(() => {
+        targetpicking();
+      });
     }
-    text(`Arrival Distance: ${this.distance}`, x, y + 40);
-    text(`Slowdown Factor: ${this.slowdown}`, x, y + 60);
+    let distanceInput,
+      slowdownInput,
+      updateDistanceButton,
+      updateSlowdownButton;
+
+    // Create input fields and buttons
+    distanceInput = createInput();
+    distanceInput.position(x, y + 40);
+
+    updateDistanceButton = createButton("Update Distance");
+    updateDistanceButton.position(x + 200, y + 40); // Align with distanceInput
+
+    slowdownInput = createInput();
+    slowdownInput.position(x, y + 70); // Move down
+
+    updateSlowdownButton = createButton("Update Slowdown");
+    updateSlowdownButton.position(x + 200, y + 70); // Align with slowdownInput
+
+    updateDistanceButton.mousePressed(() => {
+      this.distance = parseFloat(distanceInput.value());
+    });
+
+    updateSlowdownButton.mousePressed(() => {
+      this.slowdown = parseFloat(slowdownInput.value());
+    });
+
+    text(`Arrival Distance: ${this.distance}`, x, y + 20); // Move up
+    text(`Slowdown Factor: ${this.slowdown}`, x, y + 50); // Move up
   }
 }
+
+let targetpicking = () => {
+  let target = new Target(mouseX, mouseY);
+  behaviours.push(new ArrivalBehaviour(target));
+};
