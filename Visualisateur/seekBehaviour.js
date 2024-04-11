@@ -3,18 +3,6 @@ class SeekBehaviour {
     this.target = target;
   }
 
-  show(x, y) {
-    fill(0);
-    const title = "Seek Behaviour";
-    text(title, x, y);
-    if (this.target) {
-      const targetPosition = `Target Position: (${this.target.position.x}, ${this.target.position.y})`;
-      text(targetPosition, x, y + 20);
-    } else {
-      text("Target Position: None", x, y + 20);
-    }
-  }
-
   calculateForce(entity) {
     // Calculate the desired velocity towards the target
     const desiredVelocity = Vector2D.subtract(

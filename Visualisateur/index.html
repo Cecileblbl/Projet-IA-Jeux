@@ -13,6 +13,25 @@
   </head>
 
   <body>
+    <div id="left-menu">
+      <h1>Visualisateur</h1>
+      <select id="behaviourOptions">
+        <option value="none">Ajouter un comportement</option>
+        <option value="flee">Flee</option>
+        <option value="seek">Seek</option>
+        <option value="arrival">Arrival</option>
+      </select>
+      <div id="behaviour-info"></div>
+    </div>
+
+    <div id="p5-canvas">
+      <!-- p5.js dessinera le canevas ici -->
+    </div>
+
+    <div id="right-menu">
+      <!-- Vos contrôles d'interface utilisateur pour le menu de droite ici -->
+    </div>
+    <script src="script.js"></script>
     <script src="sketch.js"></script>
     <script src="arrivalBehaviour.js"></script>
     <script src="seekBehaviour.js"></script>

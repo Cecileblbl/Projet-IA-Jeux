@@ -1,8 +1,14 @@
-html, body {
-  margin: 0;
-  padding: 0;
+body {
+  display: flex;
 }
 
-canvas {
-  display: block;
+#left-menu,
+#right-menu {
+  width: 20%; /* Ajustez la largeur des menus comme vous le souhaitez */
+  height: 100vh;
+}
+
+#p5-canvas {
+  width: 60%; /* Ajustez la largeur du canevas comme vous le souhaitez */
+  height: 100vh;
 }
