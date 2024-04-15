@@ -1,25 +1,20 @@
-// Path Following (Complex Path)
-// The Nature of Code
-// The Coding Train / Daniel Shiffman
 
-// Path Following
-// Vehicle class
 
 class Vehicle {
     // Constructor initialize all values
     constructor(x, y, ms, mf) {
       this.position = createVector(x, y);
       this.r = 12;
-      this.maxspeed = ms;
-      this.maxforce = mf;
+      this.maxspeed = ms*0.7;
+      this.maxforce = mf*2;
       this.acceleration = createVector(0, 0);
       this.velocity = createVector(this.maxspeed, 0);
     }
   
     // A function to deal with path following and separation
-    applyBehaviors(vehicles, path) {
+    applyBehaviors(vehicles, paths) {
       // Follow path force
-      let f = this.follow(path);
+      let f = this.follow(paths);
  
       // Separate from other boids force
       let s = this.separate(vehicles);
@@ -40,100 +35,116 @@ class Vehicle {
     run() {
       this.update();
       this.render();
+      this.wraparound();
+    }
+    wraparound() {
+      if (this.position.x > width) {
+        this.position.x = 0;
+      } else if (this.position.x < 0) {
+        this.position.x = width;
+      }
+      if (this.position.y > height) {
+        this.position.y = 0;
+      } else if (this.position.y < 0) {
+        this.position.y = height;
+      }
     }
   
     // This function implements Craig Reynolds' path following algorithm
-    // http://www.red3d.com/cwr/steer/PathFollow.html
-    follow(path) {
-      // Predict position 25 (arbitrary choice) frames ahead
-      let predict = this.velocity.copy();
-      predict.normalize();
-      predict.mult(35);
-      let predictpos = p5.Vector.add(this.position, predict);
   
-      // Now we must find the normal to the path from the predicted position
-      // We look at the normal for each line segment and pick out the closest one
+    follow(paths) {
+      let worldRecord = 1000000; // Start with a very high worldRecord distance that can easily be beaten
+      let closestPath = null;
       let normal = null;
       let target = null;
-      let worldRecord = 1000000; // Start with a very high worldRecord distance that can easily be beaten
-  
-      // Loop through all points of the path
-      for (let i = 0; i < path.points.length; i++) {
-        // Look at a line segment
-        let a = path.points[i];
-        let b = path.points[(i + 1) % path.points.length]; // Note Path has to wraparound
-  
-        // Get the normal point to that line
-        let normalPoint = getNormalPoint(predictpos, a, b);
-  
-        // Check if normal is on line segment
-        let dir = p5.Vector.sub(b, a);
-        // If it's not within the line segment, consider the normal to just be the end of the line segment (point b)
-        //if (da + db > line.mag()+1) {
-        if (
-          normalPoint.x < min(a.x, b.x) ||
-          normalPoint.x > max(a.x, b.x) ||
-          normalPoint.y < min(a.y, b.y) ||
-          normalPoint.y > max(a.y, b.y)
-        ) {
-          normalPoint = b.copy();
-          // If we're at the end we really want the next line segment for looking ahead
-          a = path.points[(i + 1) % path.points.length];
-          b = path.points[(i + 2) % path.points.length]; // Path wraps around
-          dir = p5.Vector.sub(b, a);
-        }
-  
-        // How far away are we from the path?
-        let d = p5.Vector.dist(predictpos, normalPoint);
-        // Did we beat the worldRecord and find the closest line segment?
-        if (d < worldRecord) {
-          worldRecord = d;
-          normal = normalPoint;
-  
-          // Look at the direction of the line segment so we can seek a little bit ahead of the normal
-          dir.normalize();
-          // This is an oversimplification
-          // Should be based on distance to path & velocity
-          dir.mult(20);
-          target = normal.copy();
-          target.add(dir);
-
-        }
-        if (d < path.radius) {
-            let diff = p5.Vector.sub(normal, this.position);
-            let desired = diff.normalize().mult(this.maxspeed);
-            let steer = p5.Vector.sub(desired, this.velocity);
-            steer.limit(this.maxforce);
-            this.applyForce(steer);
+      let predictpos = null; // Declare predictpos here
+    
+      for (let path of paths) {
+        // Predict position 25 (arbitrary choice) frames ahead
+        let predict = this.velocity.copy();
+        predict.normalize();
+        predict.mult(35);
+        predictpos = p5.Vector.add(this.position, predict);
+    
+        // Now we must find the normal to the path from the predicted position
+        // We look at the normal for each line segment and pick out the closest one
+    
+        // Loop through all points of the path
+        for (let i = 0; i < path.points.length; i++) {
+          // Look at a line segment
+          let a = path.points[i];
+          let b = path.points[(i + 1) % path.points.length]; // Note Path has to wraparound
+    
+          // Get the normal point to that line
+          let normalPoint = getNormalPoint(predictpos, a, b);
+    
+          // Check if normal is on line segment
+          let dir = p5.Vector.sub(b, a);
+          // If it's not within the line segment, consider the normal to just be the end of the line segment (point b)
+          if (
+            normalPoint.x < min(a.x, b.x) ||
+            normalPoint.x > max(a.x, b.x) ||
+            normalPoint.y < min(a.y, b.y) ||
+            normalPoint.y > max(a.y, b.y)
+          ) {
+            normalPoint = b.copy();
+            // If we're at the end we really want the next line segment for looking ahead
+            a = path.points[(i + 1) % path.points.length];
+            b = path.points[(i + 2) % path.points.length]; // Path wraps around
+            dir = p5.Vector.sub(b, a);
+          }
+    
+          // How far away are we from the path?
+          let d = p5.Vector.dist(predictpos, normalPoint);
+          // Did we beat the worldRecord and find the closest line segment?
+          if (d < worldRecord) {
+            worldRecord = d;
+            normal = normalPoint;
+    
+            // Look at the direction of the line segment so we can seek a little bit ahead of the normal
+            dir.normalize();
+            // This is an oversimplification
+            // Should be based on distance to path & velocity
+            dir.mult(40);
+            target = normal.copy();
+            target.add(dir);
+            closestPath = path;
           }
         }
-  
-      // Draw the debugging stuff
-      if (debug) {
-        // Draw predicted future position
-        stroke(0);
-        fill(0);
-        line(this.position.x, this.position.y, predictpos.x, predictpos.y);
-        ellipse(predictpos.x, predictpos.y, 4, 4);
-  
-        // Draw normal position
-        stroke(0);
-        fill(0);
-        ellipse(normal.x, normal.y, 4, 4);
-        // Draw actual target (red if steering towards it)
-        line(predictpos.x, predictpos.y, target.x, target.y);
-        if (worldRecord > path.radius) fill(255, 0, 0);
-        noStroke();
-        ellipse(target.x, target.y, 8, 8);
       }
-      
-      // Only if the distance is greater than the path's radius do we bother to steer
-      if (worldRecord > path.radius) {
+    
+      // Draw the debugging stuff
+      if (debug && predictpos && normal && target) {
+        // Draw predictpos
+        fill(0, 255, 0);
+        noStroke();
+        ellipse(predictpos.x, predictpos.y, 4, 4);
+    
+        // Draw normal
+        fill(255, 0, 0);
+        noStroke();
+        ellipse(normal.x, normal.y, 4, 4);
+    
+        // Draw target
+        fill(0, 0, 255);
+        noStroke();
+        ellipse(target.x, target.y, 4, 4);
+    
+        // Draw line from predictpos to normal
+        stroke(0, 255, 0);
+        line(predictpos.x, predictpos.y, normal.x, normal.y);
+    
+        // Draw line from normal to target
+        stroke(0, 0, 255);
+        line(normal.x, normal.y, target.x, target.y);
+      }
+    
+      // Only if the distance is greater than the closest path's radius do we bother to steer
+      if (closestPath && worldRecord > closestPath.radius) {
         return this.seek(target);
       } else {
         return createVector(0, 0);
-
-      } 
+      }
     }
   
     // Separation
@@ -171,6 +182,7 @@ class Vehicle {
       }
       return steer;
     }
+    
   
     update() {
       // Update velocity

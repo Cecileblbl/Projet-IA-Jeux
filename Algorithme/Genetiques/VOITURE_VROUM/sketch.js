@@ -1,9 +1,4 @@
-// Daniel Shiffman
-// https://thecodingtrain.com/CodingChallenges/145-2d-ray-casting.html
-// https://youtu.be/TOEi6T2mtHo
 
-// 2D Ray Casting
-// https://editor.p5js.org/codingtrain/sketches/Nqsq3DFv-
 
 const TOTAL = 100;
 const MUTATION_RATE = 0.1;
@@ -25,13 +20,6 @@ let speedSlider;
 let inside = [];
 let outside = [];
 let checkpoints = [];
-
-// around 5-6 successfully completed rounds will make the fitness of 500+
-// so maxFitness is set to 500
-// thus the changeMap will flag becomes true and we will create new map
-// when any of the particle completes multiple rounds in current map
-// this will help to make the current generation to work on new map
-// and generalize to variety of maps
 const maxFitness = 500;
 let changeMap = false;
 
