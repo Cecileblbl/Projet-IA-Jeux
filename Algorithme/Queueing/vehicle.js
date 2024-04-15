@@ -45,7 +45,7 @@ class Vehicle {
     // vitesse maximale du véhicule
     this.maxSpeed = 1;
     // force maximale appliquée au véhicule
-    this.maxForce = 1;
+    this.maxForce = 0.2;
     this.color = "white";
     // à peu près en secondes
     this.dureeDeVie = 5;

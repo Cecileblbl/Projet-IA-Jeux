@@ -15,13 +15,13 @@
   <body>
     <div id="left-menu">
       <h1>Visualisateur</h1>
-      <select id="behaviourOptions">
+      <select id="BOptions">
         <option value="none">Ajouter un comportement</option>
         <option value="flee">Flee</option>
         <option value="seek">Seek</option>
         <option value="arrival">Arrival</option>
       </select>
-      <div id="behaviour-info"></div>
+      <div id="B-info"></div>
     </div>
 
     <div id="p5-canvas">
@@ -31,10 +31,13 @@
     <div id="right-menu">
       <!-- Vos contrôles d'interface utilisateur pour le menu de droite ici -->
     </div>
+    <script src="BManager.js"></script>
+    <script src="Bkeeper.js"></script>
     <script src="script.js"></script>
     <script src="sketch.js"></script>
-    <script src="arrivalBehaviour.js"></script>
-    <script src="seekBehaviour.js"></script>
-    <script src="fleeBehaviour.js"></script>
+    <script src="arrivalB.js"></script>
+    <script src="seekB.js"></script>
+    <script src="fleeB.js"></script>
+    <script src="vehicule.js"></script>
   </body>
 </html>
