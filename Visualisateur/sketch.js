@@ -9,7 +9,7 @@ function preload() {
 }
 
 function setup() {
-  createCanvas(1000, 500); // Increase the canvas width to accommodate the side menus
+  createCanvas(500, 500); // Increase the canvas width to accommodate the side menus
   background(220);
 
   BManager = new BManager();
@@ -20,6 +20,10 @@ function setup() {
     let vehicule = new Vehicle(x, y, imgVaisseau);
     vehicules.push(vehicule);
   }
+
+  //Wander behaviour on init
+  Bkeeper.addB("wander");
+  displayBs(Bkeeper.Bs);
 }
 
 function draw() {

@@ -1,6 +1,7 @@
 class SeekB {
   constructor(target) {
     this.target = target;
+    this.magnitude = 1;
   }
 
   calculateForce(entity) {

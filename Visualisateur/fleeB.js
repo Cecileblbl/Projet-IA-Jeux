@@ -1,6 +1,7 @@
 class FleeB {
   constructor(target) {
     this.target = target;
+    this.magnitude = 1;
   }
   calculateForce(entity) {
     // on calcule la direction vers la cible

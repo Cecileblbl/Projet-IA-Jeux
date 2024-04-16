@@ -6,6 +6,8 @@ document.getElementById("BOptions").addEventListener("change", function () {
     Bkeeper.addB(selectedB);
     displayBs(Bkeeper.Bs);
   }
+  // set none as selected option
+  this.value = "none";
 });
 
 function displayBs(Bs) {
@@ -45,10 +47,29 @@ function displayBs(Bs) {
         parameterLabel.textContent = key + ": ";
         var parameterInput = document.createElement("input");
         parameterInput.type = "text";
-        parameterInput.value = B[key];
+
+        // Check if the current property is 'target'
+        if (key === "target" && B[key] instanceof p5.Vector) {
+          // Stringify the vector object
+          parameterInput.value = JSON.stringify(B[key].array());
+        } else {
+          parameterInput.value = B[key];
+        }
+
         parameterInput.addEventListener("change", function (event) {
-          B[key] = event.target.value;
+          if (key === "target" && B[key] instanceof p5.Vector) {
+            // Parse the input value back to a vector object
+            var vectorArray = JSON.parse(event.target.value);
+            B[key] = createVector(
+              vectorArray[0],
+              vectorArray[1],
+              vectorArray[2]
+            );
+          } else {
+            B[key] = event.target.value;
+          }
         });
+
         parameterDiv.appendChild(parameterLabel);
         parameterDiv.appendChild(parameterInput);
         behaviorDiv.appendChild(parameterDiv);
@@ -58,3 +79,27 @@ function displayBs(Bs) {
     BInfo.appendChild(behaviorDiv);
   });
 }
+// Define a function to update and display data
+function updateAndDisplayData() {
+  var data = document.getElementById("data");
+  data.innerHTML = "";
+
+  // Assuming vehicles is defined and contains some data
+  var vehiclesData = document.createElement("div");
+
+  // Display number of vehicles
+  if (vehicules) {
+    var vehiclesCount = document.createElement("p");
+    vehiclesCount.textContent = "Number of vehicles: " + vehicules.length;
+    vehiclesData.appendChild(vehiclesCount);
+  }
+
+  // Add vehiclesData to data
+  data.appendChild(vehiclesData);
+}
+
+// Call updateAndDisplayData() initially to display data
+updateAndDisplayData();
+
+// Set up an interval to update data periodically (every 1 second in this example)
+setInterval(updateAndDisplayData, 1000);

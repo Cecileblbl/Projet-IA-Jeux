@@ -1,6 +1,7 @@
 class ArrivalB {
   constructor(target, distance = 100, slowdown = 0.2) {
     this.target = target;
+    this.magnitude = 1;
     this.distance = distance;
     this.slowdown = slowdown;
   }

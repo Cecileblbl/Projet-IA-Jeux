@@ -14,6 +14,9 @@ class Bkeeper {
     if (B === "flee") {
       this.Bs.push(new FleeB(createVector(width / 2, height / 2)));
     }
+    if (B === "wander") {
+      this.Bs.push(new WanderB());
+    }
     console.log(this.Bs);
   }
 
