@@ -27,6 +27,9 @@ function setup() {
 }
 
 function draw() {
+  if (isPaused) {
+    return;
+  }
   background(0, 0, 0, 100);
   vehicules.forEach((v) => {
     BManager.applyBs(v, Bkeeper.Bs);

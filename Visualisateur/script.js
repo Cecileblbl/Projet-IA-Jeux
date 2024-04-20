@@ -1,5 +1,12 @@
 Bkeeper = new Bkeeper();
 
+let isPaused = false;
+
+document.getElementById("pauseButton").addEventListener("click", function () {
+  isPaused = !isPaused;
+  this.textContent = isPaused ? "Resume" : "Pause";
+});
+
 document.getElementById("BOptions").addEventListener("change", function () {
   var selectedB = this.value;
   if (selectedB !== "none") {
