@@ -3,6 +3,8 @@ let select;
 let vehicules = [];
 let imgVaisseau;
 
+let obstacles = [];
+
 function preload() {
   console.log("preload");
   imgVaisseau = loadImage("assets/images/vaisseau.png");
@@ -21,8 +23,11 @@ function setup() {
     vehicules.push(vehicule);
   }
 
+  obstacles.push(new Obstacle(100, 100, 50));
+
   //Wander behaviour on init
   Bkeeper.addB("wander");
+  Bkeeper.addB("obstacleAvoidance");
   displayBs(Bkeeper.Bs);
 }
 
@@ -36,4 +41,19 @@ function draw() {
     v.update();
     v.show();
   });
+  obstacles.forEach((o) => {
+    o.show();
+  });
+}
+
+function addVehicule() {
+  let x = random(width / 2); // Position aléatoire dans la moitié gauche du canevas
+  let y = random(height); // Position aléatoire sur la hauteur du canevas
+  let vehicule = new Vehicle(x, y, imgVaisseau);
+  vehicules.push(vehicule);
+}
+
+function addObstacle() {
+  let obstacle = new Obstacle(random(width), random(height), random(10, 50));
+  obstacles.push(obstacle);
 }

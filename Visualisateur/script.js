@@ -17,6 +17,75 @@ document.getElementById("BOptions").addEventListener("change", function () {
   this.value = "none";
 });
 
+// Récupérez les boutons par leur ID
+const addVehicleButton = document.getElementById("addVehicule");
+const removeVehicleButton = document.getElementById("removeVehicule");
+const clearVehiclesButton = document.getElementById("clearVehicules");
+
+// Ajoutez un écouteur d'événements au bouton "Add vehicule"
+addVehicleButton.addEventListener("click", function () {
+  // get vehicleNumber input value
+  const vehicleNumberInput = document.getElementById("vehicleNumber");
+  const vehicleNumber = parseInt(vehicleNumberInput.value);
+  for (let i = 0; i < vehicleNumber; i++) {
+    addVehicule();
+  }
+});
+
+// Ajoutez un écouteur d'événements au bouton "Remove vehicule"
+removeVehicleButton.addEventListener("click", function () {
+  const vehicleNumberInput = document.getElementById("vehicleNumber");
+  const vehicleNumber = parseInt(vehicleNumberInput.value);
+  for (let i = 0; i < vehicleNumber; i++) {
+    // Supprimez un véhicule du tableau
+    vehicules.pop();
+  }
+  console.log(
+    "Véhicule supprimé. Nombre total de véhicules :",
+    vehicules.length
+  );
+});
+
+// Ajoutez un écouteur d'événements au bouton "Clear vehicules"
+clearVehiclesButton.addEventListener("click", function () {
+  // Videz le tableau de véhicules
+  vehicules = [];
+  console.log(
+    "Véhicules effacés. Nombre total de véhicules :",
+    vehicules.length
+  );
+});
+
+let addObstacleButton = document.getElementById("addObstacle");
+addObstacleButton.addEventListener("click", function () {
+  // Ajoutez un obstacle au tableau
+  let obstacleNumber = document.getElementById("obstacleNumber").value;
+  for (let i = 0; i < obstacleNumber; i++) {
+    addObstacle();
+  }
+  console.log("Obstacle ajouté. Nombre total d'obstacles :", obstacles.length);
+});
+
+let removeObstacleButton = document.getElementById("removeObstacle");
+removeObstacleButton.addEventListener("click", function () {
+  // Supprimez un obstacle du tableau
+  obstacles.pop();
+  console.log(
+    "Obstacle supprimé. Nombre total d'obstacles :",
+    obstacles.length
+  );
+});
+
+let clearObstaclesButton = document.getElementById("clearObstacles");
+clearObstaclesButton.addEventListener("click", function () {
+  // Videz le tableau d'obstacles
+  obstacles = [];
+  console.log(
+    "Obstacles effacés. Nombre total d'obstacles :",
+    obstacles.length
+  );
+});
+
 function displayBs(Bs) {
   var BInfo = document.getElementById("B-info");
   BInfo.innerHTML = "";
@@ -110,3 +179,19 @@ updateAndDisplayData();
 
 // Set up an interval to update data periodically (every 1 second in this example)
 setInterval(updateAndDisplayData, 1000);
+
+let maxSpeedInput = document.getElementById("maxSpeed");
+maxSpeedInput.addEventListener("change", function () {
+  let newMaxSpeed = Number(maxSpeedInput.value);
+  vehicules.forEach((vehicle) => {
+    vehicle.maxSpeed = newMaxSpeed;
+  });
+});
+
+let maxForceInput = document.getElementById("maxForce");
+maxForceInput.addEventListener("change", function () {
+  let newMaxForce = Number(maxForceInput.value);
+  vehicules.forEach((vehicle) => {
+    vehicle.maxForce = newMaxForce;
+  });
+});

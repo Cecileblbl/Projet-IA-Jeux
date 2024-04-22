@@ -17,6 +17,9 @@ class Bkeeper {
     if (B === "wander") {
       this.Bs.push(new WanderB());
     }
+    if (B === "obstacleAvoidance") {
+      this.Bs.push(new ObstacleAvoidanceB());
+    }
     console.log(this.Bs);
   }
 
