@@ -16,24 +16,24 @@ class Bordures {
     let bordBas = this.zoneY + this.zoneHeight;
 
     if (entity.pos.x < bordGauche + this.d) {
-      desired = createVector(entity.maxspeed, entity.vel.y);
+      desired = createVector(entity.maxSpeed, entity.vel.y);
     } else if (entity.pos.x > bordDroit - this.d) {
-      desired = createVector(-entity.maxspeed, entity.vel.y);
+      desired = createVector(-entity.maxSpeed, entity.vel.y);
     }
 
     if (entity.pos.y < bordHaut + this.d) {
-      desired = createVector(entity.vel.x, entity.maxspeed);
+      desired = createVector(entity.vel.x, entity.maxSpeed);
     } else if (entity.pos.y > bordBas - this.d) {
-      desired = createVector(entity.vel.x, -entity.maxspeed);
+      desired = createVector(entity.vel.x, -entity.maxSpeed);
     }
 
     if (desired !== null) {
       // le véhicule est près d'un des bords, on calcule la force de répulsion
       // force = vitesse désirée - vitesse courante et on limite à maxForce
       desired.normalize();
-      desired.mult(entity.maxspeed);
+      desired.mult(entity.maxSpeed);
       const steer = p5.Vector.sub(desired, entity.vel);
-      steer.limit(entity.maxforce);
+      steer.limit(entity.maxForce);
       return steer;
     } else {
       // le véhicule est loin des bords,
