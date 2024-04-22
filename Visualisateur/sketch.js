@@ -28,6 +28,7 @@ function setup() {
   //Wander behaviour on init
   Bkeeper.addB("wander");
   Bkeeper.addB("obstacleAvoidance");
+  Bkeeper.addB("Bordures");
   displayBs(Bkeeper.Bs);
 }
 

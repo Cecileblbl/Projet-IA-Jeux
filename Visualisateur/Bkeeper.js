@@ -20,6 +20,9 @@ class Bkeeper {
     if (B === "obstacleAvoidance") {
       this.Bs.push(new ObstacleAvoidanceB());
     }
+    if (B === "Bordures") {
+      this.Bs.push(new Bordures());
+    }
     console.log(this.Bs);
   }
 
