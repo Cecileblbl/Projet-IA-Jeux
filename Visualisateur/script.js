@@ -97,13 +97,7 @@ function displayBs(Bs) {
 
     // Add behavior name
     var behaviorName = document.createElement("h4");
-    if (B instanceof ArrivalB) {
-      behaviorName.textContent = "Arrival B";
-    } else if (B instanceof SeekB) {
-      behaviorName.textContent = "Seek B";
-    } else if (B instanceof FleeB) {
-      behaviorName.textContent = "Flee B";
-    }
+    behaviorName.textContent = B.constructor.name;
     behaviorDiv.appendChild(behaviorName);
 
     //remove behaviour button
