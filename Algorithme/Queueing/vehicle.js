@@ -45,7 +45,7 @@ class Vehicle {
     // vitesse maximale du véhicule
     this.maxSpeed = 1;
     // force maximale appliquée au véhicule
-    this.maxForce = 1;
+    this.maxForce = 0.2;
     this.color = "white";
     // à peu près en secondes
     this.dureeDeVie = 5;
@@ -68,36 +68,24 @@ class Vehicle {
   applyBehaviors(target, obstacles, vehicules, walls) {
     let seekForce = this.arrive(target);
     let avoidForceObstacles = this.avoid(obstacles);
-    //let avoidForceVehicules = this.avoidVehicules(vehicules);
     let separationForce = this.separate(vehicules);
     let avoidForceWalls = this.avoidWalls(walls);
 
-    // force de répulsion sur les bords du canvas
-    // utile pour coder le "containment": le fait de ne pas sortir d'une zone
-    // rectagulaire donnée
-    // x, y : position du coin supérieur gauche du rectangle
-    // width, height : largeur et hauteur du rectangle
-    // d : distance à partir de laquelle on est repoussé
-
     seekForce.mult(0.3);
     avoidForceObstacles.mult(0.5);
-    // avoidForceVehicules.mult(0);
     separationForce.mult(0.9);
     avoidForceWalls.mult(0.5);
 
     this.applyForce(seekForce);
     this.applyForce(avoidForceObstacles);
-    // this.applyForce(avoidForceVehicules);
     this.applyForce(separationForce);
     this.applyForce(avoidForceWalls);
   }
 
   avoidWalls(walls) {
-    // Maximum distance to consider for avoiding walls
     let worldrecord = 1000000;
     let avoidanceDistance = 540;
 
-    // Force to avoid walls
     let ahead = this.vel.copy();
     ahead.mult(this.distanceAhead);
 
@@ -138,8 +126,6 @@ class Vehicle {
         } else if (distance3 == plusPetiteDistance) {
           pointLePlusProcheDeObstacle = this.pos;
         }
-
-        ellipse(pointAhead.x, pointAhead.y, 10, 10);
 
         if (plusPetiteDistance < this.largeurZoneEvitementDevantVaisseau) {
           // collision possible
@@ -633,7 +619,6 @@ class Vehicle {
     pop();
   }
 
-  // que fait cette méthode ?
   edges() {
     if (this.pos.x > width + this.r) {
       this.pos.x = -this.r;
