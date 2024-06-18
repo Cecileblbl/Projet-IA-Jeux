@@ -348,8 +348,9 @@ select::-ms-expand {
   }
 }
 
-#pauseButton {
-  background-color: #d62929; /* Red background color */
+#clearVehicules,
+#clearObstacles {
+  background-color: #0f4481; /* Blue background color */
   color: white; /* Text color */
   border: none; /* No border */
   padding: 10px 20px; /* Padding */
@@ -359,14 +360,48 @@ select::-ms-expand {
   font-family: Verdana, Geneva, Tahoma, sans-serif; /* Font family */
 }
 
-#pauseButton:hover {
-  background-color: #b71c1c; /* Darker red on hover */
+#clearVehicules:hover,
+#clearObstacles:hover {
+  background-color: #357dbf; /* Darker blue on hover */
 }
 
-#pauseButton:active {
+#clearVehicules:active,
+#clearObstacles:active {
   transform: translateY(1px); /* Button press effect */
 }
 
-#pauseButton:focus {
+#clearVehicules:focus,
+#clearObstacles:focus {
+  outline: none; /* Removes default focus outline */
+}
+
+#removeVehicule,
+#removeObstacle,
+#removeButton {
+  background-color: #9a1111; /* Red background color */
+  color: white; /* Text color */
+  border: none; /* No border */
+  padding: 10px 20px; /* Padding */
+  border-radius: 4px; /* Rounded corners */
+  cursor: pointer; /* Pointer cursor */
+  transition: background-color 0.3s, color 0.3s; /* Smooth transitions */
+  font-family: Verdana, Geneva, Tahoma, sans-serif; /* Font family */
+}
+
+#removeVehicule:hover,
+#removeObstacle:hover,
+#removeButton:hover {
+  background-color: #b71c1c; /* Darker red on hover */
+}
+
+#removeVehicule:active,
+#removeObstacle:active,
+#removeButton:active {
+  transform: translateY(1px); /* Button press effect */
+}
+
+#removeVehicule:focus,
+#removeObstacle:focus,
+#removeButton:focus {
   outline: none; /* Removes default focus outline */
 }

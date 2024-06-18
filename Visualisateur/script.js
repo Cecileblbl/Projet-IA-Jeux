@@ -5,6 +5,15 @@ let isPaused = false;
 document.getElementById("pauseButton").addEventListener("click", function () {
   isPaused = !isPaused;
   this.textContent = isPaused ? "Resume" : "Pause";
+
+  // Change button style based on isPaused
+  if (isPaused) {
+    this.style.backgroundColor = "#d62929"; // Red background color
+    this.style.color = "white"; // White text color
+  } else {
+    this.style.backgroundColor = "#4a90e2"; // Blue background color
+    this.style.color = "white"; // White text color
+  }
 });
 
 document.getElementById("BOptions").addEventListener("change", function () {
@@ -102,6 +111,7 @@ function displayBs(Bs) {
 
     //remove behaviour button
     var removeButton = document.createElement("button");
+    removeButton.id = "removeButton";
     removeButton.textContent = "Remove";
     removeButton.addEventListener("click", function () {
       Bkeeper.removeB(B);
