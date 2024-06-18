@@ -1,18 +1,4 @@
-// Smart Rockets
-// The Nature of Code
-// The Coding Train / Daniel Shiffman
-// https://youtu.be/_of6UVV4HGo
-// https://thecodingtrain.com/more/achive/nature-of-code/9-genetic-algorithms/9.5-fitness-genotype-vs-phenotype.html
-// https://editor.p5js.org/codingtrain/sketches/BOTCxBDbO
 
-// http://natureofcode.com
-
-// Pathfinding w/ Genetic Algorithms
-
-// A class for an obstacle, just a simple rectangle that is drawn
-// and can check if a Rocket touches it
-
-// Also using this class for target position
 
 class Obstacle {
   constructor(x, y, w, h) {

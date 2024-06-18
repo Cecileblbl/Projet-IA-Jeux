@@ -40,13 +40,14 @@ function newPath() {
   let offset = 140; // Distance from the corner
 
   // Top-left corner
-  let path1 = new Path();
-  path1.addPoint(offset, offset);
- 
-  path1.addPoint(-1000, offset);
+  let path = new Path();
+  path.addPoint(offset, offset);
 
-  path1.addPoint(offset,-1000);
-  paths.push(path1);
+  path.addPoint(-1000, offset);
+  path.addPoint(offset+100,-1000);
+  
+
+  paths.push(path);
 
   // Top-right corner
   let path2 = new Path();

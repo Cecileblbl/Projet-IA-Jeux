@@ -19,29 +19,16 @@ class Path {
   
       // Draw thick line for radius
       stroke(20);
-      strokeWeight(this.radius/9);
+      strokeWeight(this.radius/4);
       noFill();
       beginShape();
       for (let v of this.points) {
         vertex(v.x, v.y);
       }
       endShape(CLOSE);
-      // Draw thin line for center of path
-      stroke(0);
-        strokeWeight(1);
-        noFill();
+
 
     }
-    display() {
-      strokeJoin(ROUND);
 
-      stroke(0);
-      strokeWeight(this.radius /9 );
-      beginShape();
-      for (let v of this.points) {
-        vertex(v.x*1.05-15, v.y *1.1 -20); // Subtract this.radius/2 from the y-coordinate
-      }
-      endShape(CLOSE);
-    }
   }
   
