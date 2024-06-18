@@ -1,11 +1,3 @@
-// Path Following (Complex Path)
-// The Nature of Code
-// The Coding Train / Daniel Shiffman
-// https://youtu.be/LrnR6dc2IfM
-// https://thecodingtrain.com/learning/nature-of-code/5.7-path-following.html
-
-// Path Following: https://editor.p5js.org/codingtrain/sketches/dqM054vBV
-// Complex Path: https://editor.p5js.org/codingtrain/sketches/2FFzvxwVt
 
 class Path {
     constructor() {
@@ -21,7 +13,6 @@ class Path {
       let point = createVector(x, y);
       this.points.push(point);
     }
-  
     // Draw the path
     display() {
       strokeJoin(ROUND);
@@ -48,7 +39,7 @@ class Path {
       strokeWeight(this.radius /9 );
       beginShape();
       for (let v of this.points) {
-        vertex(v.x*1.05-15, v.y *1.1 -12); // Subtract this.radius/2 from the y-coordinate
+        vertex(v.x*1.05-15, v.y *1.1 -20); // Subtract this.radius/2 from the y-coordinate
       }
       endShape(CLOSE);
     }
