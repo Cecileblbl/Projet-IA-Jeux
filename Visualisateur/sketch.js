@@ -12,7 +12,7 @@ function preload() {
 
 function setup() {
   // Create a canvas and append it to a div with id "p5-canvas"
-  let canvas = createCanvas(500, 500);
+  let canvas = createCanvas(800, 500);
 
   // Use the parent method to attach the canvas to the existing div with id "p5-canvas"
   canvas.parent("p5-canvas");
