@@ -1,6 +1,7 @@
 class ObstacleAvoidanceB {
   constructor() {
     this.largeurZoneEvitementDevantVaisseau = 10;
+    this.magnitude = 1;
   }
 
   calculateForce(entity) {

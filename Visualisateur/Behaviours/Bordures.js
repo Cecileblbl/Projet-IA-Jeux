@@ -5,6 +5,7 @@ class Bordures {
     this.zoneWidth = width;
     this.zoneHeight = height;
     this.d = d;
+    this.magnitude = 1;
   }
 
   calculateForce(entity) {

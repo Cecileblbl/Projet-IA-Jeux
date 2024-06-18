@@ -11,7 +11,12 @@ function preload() {
 }
 
 function setup() {
-  createCanvas(500, 500); // Increase the canvas width to accommodate the side menus
+  // Create a canvas and append it to a div with id "p5-canvas"
+  let canvas = createCanvas(500, 500);
+
+  // Use the parent method to attach the canvas to the existing div with id "p5-canvas"
+  canvas.parent("p5-canvas");
+
   background(220);
 
   BManager = new BManager();

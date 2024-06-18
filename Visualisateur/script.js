@@ -137,6 +137,7 @@ function displayBs(Bs) {
             );
           } else {
             B[key] = event.target.value;
+            console.log;
           }
         });
 
