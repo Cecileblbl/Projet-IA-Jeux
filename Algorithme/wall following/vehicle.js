@@ -63,7 +63,7 @@ class Vehicle {
         // Predict position 25 (arbitrary choice) frames ahead
         let predict = this.velocity.copy();
         predict.normalize();
-        predict.mult(35);
+        predict.mult(50);
         predictpos = p5.Vector.add(this.position, predict);
     
         // Now we must find the normal to the path from the predicted position
@@ -143,7 +143,7 @@ class Vehicle {
       if (closestPath && worldRecord > closestPath.radius) {
         return this.seek(target);
       } else {
-        return createVector(0, 0);
+        return createVector(100, 0);
       }
     }
   
