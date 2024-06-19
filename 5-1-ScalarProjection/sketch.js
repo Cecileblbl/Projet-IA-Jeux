@@ -43,7 +43,7 @@ function draw() {
 
   strokeWeight(1);
   stroke(255);
-   line(pos.x + a.x, pos.y + a.y, v.x + pos.x, v.y + pos.y);
+  line(pos.x + a.x, pos.y + a.y, v.x + pos.x, v.y + pos.y);
 
   fill(0, 255, 0);
   noStroke();
@@ -53,7 +53,7 @@ function draw() {
   noStroke();
   circle(v.x + pos.x, v.y + pos.y, 16);
 
-  fill(0, 255, 0);
+  fill(0, 205, 0);
   noStroke();
-  // circle(pos.x, pos.y, 16);
+  circle(pos.x, pos.y, 16);
 }
