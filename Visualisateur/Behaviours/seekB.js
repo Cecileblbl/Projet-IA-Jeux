@@ -24,4 +24,35 @@ class SeekB {
     // draw target
     ellipse(this.target.x, this.target.y, 10, 10);
   }
+
+  debug(entity) {
+    // Step 1: Calculate the direction towards the target
+    let force = p5.Vector.sub(this.target, entity.pos);
+
+    // Step 2: Limit the vector to maximum speed
+    force.setMag(entity.maxSpeed);
+
+    // Step 3: Calculate the desired velocity
+    let desired = p5.Vector.sub(force, entity.vel);
+
+    // Step 4: Limit the force to maximum force
+    desired.limit(entity.maxForce);
+
+    // Step 5: Draw the green vector representing the force
+    push();
+    stroke(0, 255, 0); // Green color
+    strokeWeight(3);
+    let arrowSize = 10;
+    line(
+      entity.pos.x,
+      entity.pos.y,
+      entity.pos.x + desired.x,
+      entity.pos.y + desired.y
+    );
+    translate(entity.pos.x + desired.x, entity.pos.y + desired.y);
+    rotate(desired.heading());
+    translate(-arrowSize / 2, 0);
+    triangle(0, arrowSize / 2, 0, -arrowSize / 2, arrowSize, 0);
+    pop();
+  }
 }

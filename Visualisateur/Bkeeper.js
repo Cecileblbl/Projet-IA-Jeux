@@ -23,6 +23,12 @@ class Bkeeper {
     if (B === "Bordures") {
       this.Bs.push(new Bordures());
     }
+    if (B === "evade") {
+      this.Bs.push(new EvadeB(new Target((width / 2, height / 2))));
+    }
+    if (B === "pursue") {
+      this.Bs.push(new PursueB(new Target((width / 2, height / 2))));
+    }
     console.log(this.Bs);
   }
 

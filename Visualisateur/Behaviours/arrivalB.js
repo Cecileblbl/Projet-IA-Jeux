@@ -28,4 +28,11 @@ class ArrivalB {
     // draw target
     ellipse(this.target.x, this.target.y, 10, 10);
   }
+
+  debug(entity) {
+    // Draw the slowing down zone around the target
+    stroke("red");
+    noFill();
+    ellipse(this.target.x, this.target.y, this.distance * 2);
+  }
 }

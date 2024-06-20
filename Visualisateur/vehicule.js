@@ -28,7 +28,7 @@ class Vehicle {
     // vitesse maximale du véhicule
     this.maxSpeed = 1;
     // force maximale appliquée au véhicule
-    this.maxForce = 0.2;
+    this.maxForce = 0.1;
     this.color = "white";
     // à peu près en secondes
     this.dureeDeVie = 5;
@@ -45,25 +45,6 @@ class Vehicle {
     this.path = [];
     this.pathMaxLength = 30;
   }
-
-  // on fait une méthode applyBehaviors qui applique les comportements
-  // seek et avoid
-  //   applyBehaviors(target, obstacles, vehicules, walls) {
-  //     let seekForce = this.arrive(target);
-  //     let avoidForceObstacles = this.avoid(obstacles);
-  //     let separationForce = this.separate(vehicules);
-  //     let avoidForceWalls = this.avoidWalls(walls);
-
-  //     seekForce.mult(0.3);
-  //     avoidForceObstacles.mult(0.5);
-  //     separationForce.mult(0.9);
-  //     avoidForceWalls.mult(0.5);
-
-  //     this.applyForce(seekForce);
-  //     this.applyForce(avoidForceObstacles);
-  //     this.applyForce(separationForce);
-  //     this.applyForce(avoidForceWalls);
-  //   }
 
   applyB() {
     let wanderForce = this.wander();
@@ -230,12 +211,72 @@ class Vehicle {
     return steer;
   }
 }
-
 class Target extends Vehicle {
   constructor(x, y) {
     super(x, y);
     this.vel = p5.Vector.random2D();
-    this.vel.mult(5);
+    this.vel.mult(1); // Adjusted initial velocity magnitude
+    this.wanderTheta = 0;
+    this.distanceCercleWander = 50; // Distance to the wander circle
+    this.wanderRadius = 1; // Radius of the wander circle
+    this.magnitude = 1; // Adjusted magnitude of the wander force
+    this.displaceRange = 1; // Adjusted maximum change in wander angle per update
+    this.maxSpeed = 0.05;
+    this.maxForce = 1;
+  }
+
+  update() {
+    // Calculate the wander force
+    let wanderForce = this.calculateWanderForce();
+    this.applyForce(wanderForce);
+
+    // Update position and velocity
+    this.vel.add(this.acc);
+    this.vel.limit(this.maxSpeed);
+    this.pos.add(this.vel);
+    this.acc.set(0, 0);
+
+    // Ensure the target stays within canvas bounds
+    if (this.pos.x > width - this.r) {
+      this.pos.x = width - this.r;
+      this.vel.x *= -1;
+    } else if (this.pos.x < this.r) {
+      this.pos.x = this.r;
+      this.vel.x *= -1;
+    }
+
+    if (this.pos.y > height - this.r) {
+      this.pos.y = height - this.r;
+      this.vel.y *= -1;
+    } else if (this.pos.y < this.r) {
+      this.pos.y = this.r;
+      this.vel.y *= -1;
+    }
+  }
+
+  calculateWanderForce() {
+    // Calculate the wander point
+    let wanderPoint = this.vel
+      .copy()
+      .setMag(this.distanceCercleWander)
+      .add(this.pos);
+
+    // Calculate the displacement
+    let theta = this.wanderTheta + this.vel.heading();
+    let x = this.wanderRadius * cos(theta);
+    let y = this.wanderRadius * sin(theta);
+    wanderPoint.add(x, y);
+
+    // Calculate the desired speed towards the wander point
+    let desiredSpeed = wanderPoint.sub(this.pos);
+
+    // Calculate the wander force
+    let force = desiredSpeed.copy().setMag(this.magnitude);
+
+    // Update the wander angle for next frame
+    this.wanderTheta += random(-this.displaceRange, this.displaceRange);
+
+    return force;
   }
 
   show() {
@@ -243,10 +284,8 @@ class Target extends Vehicle {
     stroke(255);
     strokeWeight(2);
     fill("#F063A4");
-    push();
     translate(this.pos.x, this.pos.y);
     circle(0, 0, this.r * 2);
-    pop();
     pop();
   }
 

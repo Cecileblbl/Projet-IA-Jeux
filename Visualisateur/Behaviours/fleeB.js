@@ -23,4 +23,26 @@ class FleeB {
     // draw target
     ellipse(this.target.x, this.target.y, 10, 10);
   }
+
+  debug(entity) {
+    // Draw a line from entity to target
+    stroke(255, 0, 0);
+    line(this.target.x, this.target.y, entity.pos.x, entity.pos.y);
+
+    // Draw a transparent red circle around the target
+    noFill();
+    stroke(255, 0, 0, 100);
+    ellipse(this.target.x, this.target.y, this.target.r * 2);
+
+    // Draw a line showing the fleeing direction
+    let fleeingDirection = p5.Vector.sub(entity.pos, this.target.pos);
+    fleeingDirection.setMag(30);
+    stroke(0, 255, 0);
+    line(
+      entity.pos.x,
+      entity.pos.y,
+      entity.pos.x + fleeingDirection.x,
+      entity.pos.y + fleeingDirection.y
+    );
+  }
 }

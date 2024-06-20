@@ -34,6 +34,7 @@ function setup() {
   Bkeeper.addB("wander");
   Bkeeper.addB("obstacleAvoidance");
   Bkeeper.addB("Bordures");
+  Bkeeper.addB("pursue");
   displayBs(Bkeeper.Bs);
 }
 

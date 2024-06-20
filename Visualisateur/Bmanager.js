@@ -12,6 +12,9 @@ class BManager {
       vehicle.applyForce(force);
 
       Bs[i].draw();
+      if (debug) {
+        Bs[i].debug(vehicle);
+      }
     }
   }
 }

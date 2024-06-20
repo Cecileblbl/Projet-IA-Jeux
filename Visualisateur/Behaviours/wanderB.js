@@ -31,4 +31,23 @@ class WanderB {
     return force;
   }
   draw() {}
+
+  debug(entity) {
+    // Draw the wander radius
+    noFill();
+    stroke(0, 255, 0); // Green color for radius
+    ellipse(entity.pos.x, entity.pos.y, this.wanderRadius * 2);
+
+    // Draw the wander direction line
+    let wanderDirection = p5.Vector.fromAngle(
+      entity.vel.heading() + this.wanderTheta
+    ).setMag(this.wanderRadius);
+    stroke(255, 0, 0); // Red color for direction line
+    line(
+      entity.pos.x,
+      entity.pos.y,
+      entity.pos.x + wanderDirection.x,
+      entity.pos.y + wanderDirection.y
+    );
+  }
 }

@@ -88,6 +88,8 @@ class ObstacleAvoidanceB {
   }
 
   draw() {}
+
+  debug(entity) {}
 }
 
 function getObstacleLePlusProche(entity) {

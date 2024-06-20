@@ -42,5 +42,43 @@ class Bordures {
       return createVector(0, 0);
     }
   }
-  draw() {}
+  draw() {
+    // Draw the main border zone
+    stroke("blue");
+    noFill();
+    rect(this.zoneX, this.zoneY, this.zoneWidth, this.zoneHeight);
+
+    // Draw the "danger zones" where the entity starts to be repelled
+    stroke("red");
+    // Left border danger zone
+    line(
+      this.zoneX + this.d,
+      this.zoneY,
+      this.zoneX + this.d,
+      this.zoneY + this.zoneHeight
+    );
+    // Right border danger zone
+    line(
+      this.zoneX + this.zoneWidth - this.d,
+      this.zoneY,
+      this.zoneX + this.zoneWidth - this.d,
+      this.zoneY + this.zoneHeight
+    );
+    // Top border danger zone
+    line(
+      this.zoneX,
+      this.zoneY + this.d,
+      this.zoneX + this.zoneWidth,
+      this.zoneY + this.d
+    );
+    // Bottom border danger zone
+    line(
+      this.zoneX,
+      this.zoneY + this.zoneHeight - this.d,
+      this.zoneX + this.zoneWidth,
+      this.zoneY + this.zoneHeight - this.d
+    );
+  }
+
+  debug(entity) {}
 }

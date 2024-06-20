@@ -2,12 +2,28 @@ Bkeeper = new Bkeeper();
 
 let isPaused = false;
 
+let debug = false;
+
 document.getElementById("pauseButton").addEventListener("click", function () {
   isPaused = !isPaused;
   this.textContent = isPaused ? "Resume" : "Pause";
 
   // Change button style based on isPaused
   if (isPaused) {
+    this.style.backgroundColor = "#d62929"; // Red background color
+    this.style.color = "white"; // White text color
+  } else {
+    this.style.backgroundColor = "#4a90e2"; // Blue background color
+    this.style.color = "white"; // White text color
+  }
+});
+
+document.getElementById("debugButton").addEventListener("click", function () {
+  debug = !debug;
+  this.textContent = debug ? "Deactivate Debug" : "Activate Debug";
+
+  // Change button style based on isPaused
+  if (debug) {
     this.style.backgroundColor = "#d62929"; // Red background color
     this.style.color = "white"; // White text color
   } else {
