@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Steering Behaviors</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="toolbar">
+    <div class="logo">Steering Behaviors</div>
+</header>
+<div class="container">
+    <nav class="sidenav">
+        <h3>Behaviors BabylonJS</h3>
+        <button data-behavior="1">Comportement Arrival</button>
+        <button data-behavior="2">Comportement Boids</button>
+        <button data-behavior="3">Comportement Obstacle Avoid</button>
+        <button data-behavior="4">Comportement Path Follow</button>
+        <button data-behavior="5">Comportement Path Follow Complex</button>
+        <button data-behavior="6">Comportement Scalar Projection</button>
+        <button data-behavior="7">Comportement Pursue Evade</button>
+        <button data-behavior="8">Comportement Seek</button>
+        <button data-behavior="9">Comportement Wander</button>
+        <button data-behavior="10">Comportement A*</button>
+    </nav>
+    <div class="main-content">
+        <div id="sliders">
+            <label for="alignSlider">Alignement</label>
+            <input type="range" id="alignSlider" name="alignSlider" min="0" max="5" step="0.1" value="1">
+            <label for="cohesionSlider">Cohésion</label>
+            <input type="range" id="cohesionSlider" name="cohesionSlider" min="0" max="5" step="0.1" value="1">
+            <label for="separationSlider">Séparation</label>
+            <input type="range" id="separationSlider" name="separationSlider" min="0" max="5" step="0.1" value="1">
+        </div>
+        <canvas id="canvas1" data-behavior="initializeBehavior1"></canvas>
+        <canvas id="canvas2" data-behavior="initializeBehavior2"></canvas>
+        <canvas id="canvas3" data-behavior="initializeBehavior3"></canvas>
+        <canvas id="canvas4" data-behavior="initializeBehavior4"></canvas>
+        <canvas id="canvas5" data-behavior="initializeBehavior5"></canvas>
+        <canvas id="canvas6" data-behavior="initializeBehavior6"></canvas>
+        <canvas id="canvas7" data-behavior="initializeBehavior7"></canvas>
+        <canvas id="canvas8" data-behavior="initializeBehavior8"></canvas>
+        <canvas id="canvas9" data-behavior="initializeBehavior9"></canvas>
+        <canvas id="canvas10" data-behavior="initializeBehavior10"></canvas>
+    </div>
+</div>
+
+<script src="https://cdn.babylonjs.com/babylon.js"></script>
+<script src="Arrival.js"></script>
+<script src="Boids.js"></script>
+<script src="AvoidObstacle.js"></script>
+<script src="PathFollow.js"></script>
+<script src="PathFollowComplex.js"></script>
+<script src="ScalarProjection.js"></script>
+<script src="PursueEvade.js"></script>
+<script src="Seek.js"></script>
+<script src="Wander.js"></script>
+<script src="AStar.js"></script>
+
+<script>
+    function showCanvas(canvasId) {
+        document.querySelectorAll('canvas').forEach(canvas => {
+            canvas.classList.remove('active');
+        });
+        const canvas = document.getElementById('canvas' + canvasId);
+        if (canvas) {
+            canvas.classList.add('active');
+            const ratio = window.devicePixelRatio || 1;
+            canvas.width = canvas.clientWidth * ratio;
+            canvas.height = canvas.clientHeight * ratio;
+
+            const sliders = document.getElementById('sliders');
+            if (canvasId === '2') {
+                sliders.style.display = 'flex';
+            } else {
+                sliders.style.display = 'none';
+            }
+
+            const behavior = canvas.getAttribute('data-behavior');
+            if (behavior && window[behavior]) {
+                window[behavior]();
+            }
+        } else {
+            console.error('No canvas found with id:', 'canvas' + canvasId);
+        }
+    }
+
+    document.querySelectorAll('.sidenav button').forEach(button => {
+        button.addEventListener('click', (event) => {
+            const behavior = button.getAttribute('data-behavior');
+            if (behavior) {
+                showCanvas(behavior);
+            }
+        });
+    });
+</script>
+</body>
+</html>
