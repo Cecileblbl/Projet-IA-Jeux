@@ -1,88 +1,55 @@
-// Using this variable to decide whether to draw all the stuff
-let debug = false;
-
-// A path object (series of connected points)
-let paths = [];
-
-// Two vehicles
-let vehicles = [];
+let walls = [];
+let character;
+let wallFollowDistance = 50; // Desired distance from the wall
+let debugMode = false; // Variable to indicate if debug mode is enabled
 
 function setup() {
-  createCanvas(640, 360);
-  // Call a function to generate new Path object
-  newPath();
-
-  // We are now making random vehicles and storing them in an ArrayList
-  for (let i = 0; i < 12; i++) {
-    newVehicle(width/2, height/2);
-  }
-  createP(
-    "Hit 'd' to toggle debugging lines.<br/>Click the mouse to generate new vehicles."
-  );
+  createCanvas(800, 600);
+  
+  // Define walls (start and end points)
+  walls.push(new Wall(100, 5, 700, 0));
+  walls.push(new Wall(700, 0, 750, 100));
+  walls.push(new Wall(750, 100, 750, 500));
+  walls.push(new Wall(750, 500, 400, 580));
+  walls.push(new Wall(400, 580, 100, 500));
+  walls.push(new Wall(100, 500, 100, 100));
+  walls.push(new Wall(100, 100, 100, 5));
+  
+  // Create the character
+  character = new Character(200, 200);
 }
 
 function draw() {
-  background(240);
-  // Display the path
-  for (let path of paths) {
-    path.display();
-  }
-
-  for (let v of vehicles) {
-    // Path following and separation are worked on in this function
-    v.applyBehaviors(vehicles, paths);
-    // Call the generic run method (update, borders, display, etc.)
-    v.run();
-  }
-}
-
-function newPath() {
-  let offset = 140; // Distance from the corner
-
-  // Top-left corner
-  let path = new Path();
-  path.addPoint(offset, offset);
-
-  path.addPoint(-1000, offset);
-  path.addPoint(offset+100,-1000);
+  background(220);
   
-
-  paths.push(path);
-
-  // Top-right corner
-  let path2 = new Path();
-  path2.addPoint(width - offset, offset);
-  path2.addPoint(1000, offset);
-  path2.addPoint(offset, -20000);
-  paths.push(path2);
-
-  // Bottom-right corner
-  let path3 = new Path();
-  path3.addPoint(width - offset, height - offset);
-  path3.addPoint(1000, height - offset);
-  path3.addPoint(width - offset, 1000);
-  paths.push(path3);
-
-  // Bottom-left corner
-  let path4 = new Path();
-  path4.addPoint(offset, height - offset);
-  path4.addPoint(-1000, height - offset);
-  path4.addPoint(offset, 1000);
-  paths.push(path4);
-}
-
-function newVehicle(x, y) {
-  let maxspeed = 2.5;
-  let maxforce = 0.5;
-  vehicles.push(new Vehicle(x, y, maxspeed, maxforce));
-}
-
-function keyPressed() {
-  if (key == "d") {
-    debug = !debug;
+  // Draw walls
+  for (let wall of walls) {
+    wall.show();
   }
+  
+  // Toggle debug mode on/off with 'd' key
+  if (keyIsDown(68)) { // 68 is the keycode for 'd'
+    debugMode = !debugMode;
+  }
+  
+  // Update and draw character
+  character.followWall(walls);
+  character.update();
+  
+  // Draw character and vectors (if debug mode is on)
+  if (debugMode) {
+    character.drawVectors();
+  }
+  
+  character.show();
 }
 
-function mousePressed() {
-  newVehicle(mouseX, mouseY);
+// Wall class
+
+function getNormalPoint(p, a, b) {
+  let ap = p5.Vector.sub(p, a);
+  let ab = p5.Vector.sub(b, a);
+  ab.setMag(ap.dot(ab) / ab.mag());
+  let normalPoint = p5.Vector.add(a, ab);
+  return normalPoint;
 }
