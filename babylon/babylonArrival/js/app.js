@@ -177,7 +177,7 @@ function moveBox() {
   let boxSize = 2;
   let halfBoxSize = boxSize / 2;
 
-  let moveSpeed = 1.0;
+  let moveSpeed = 0.5;
 
   if (inputStates.left && box.position.x - halfBoxSize > -halfGroundSize) box.position.x -= moveSpeed;
   if (inputStates.right && box.position.x + halfBoxSize < halfGroundSize) box.position.x += moveSpeed;
