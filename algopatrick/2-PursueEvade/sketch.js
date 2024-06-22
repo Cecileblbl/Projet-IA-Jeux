@@ -21,7 +21,7 @@ function setup() {
 
 function draw() {
   background(0);
-  let forcePoursuite = pursuer.pursue(target);
+  let forcePoursuite = pursuer.pursuePerfect(target);
   pursuer.applyForce(forcePoursuite);
 
   if ((frameCount % 300) < 200) {

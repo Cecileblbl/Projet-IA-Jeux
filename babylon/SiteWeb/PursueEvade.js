@@ -12,7 +12,7 @@ function initializeBehavior7() {
     let segments = []; // Segments du serpent
     let serpents = []; // Liste des serpents
     let inputStates = {}; // États d'entrée
-    let distancePrediction = 2; // Distance de prédiction pour la poursuite et l'évasion
+    let distancePrediction = 3; // Distance de prédiction pour la poursuite et l'évasion
 
     // Fonction pour démarrer le jeu
     function startGame() {
@@ -109,17 +109,40 @@ function initializeBehavior7() {
     }
 
     function moveBoxContinuously() {
-        let boxSpeed = 0.4; // vitesse de déplacement du cube
-        let newBoxPosition = box.position.add(boxDirection.scale(boxSpeed)); // Déplace le cube dans la direction actuelle
+        let boxSpeed = 0.3; // Augmenté pour une meilleure réactivité
+        let evadeForce = evade([sphere, ...serpents.map(s => s.head)], box);
 
-        // Vérifie si le cube atteint les limites du terrain et change de direction si nécessaire
+        // Ajoute une force aléatoire pour éviter les mouvements prévisibles
+        let randomForce = new BABYLON.Vector3(Math.random() - 0.5, 0, Math.random() - 0.5).normalize().scale(0.2);
+
+        // Combine les forces
+        let totalForce = evadeForce.add(randomForce);
+
+        // Limite la force totale
+        if (totalForce.length() > 1) {
+            totalForce.normalize();
+        }
+
+        // Mise à jour de la direction de la boîte
+        boxDirection = boxDirection.scale(0.8).add(totalForce.scale(0.2)).normalize();
+
+        // Calcul de la nouvelle position
+        let newBoxPosition = box.position.add(boxDirection.scale(boxSpeed));
+
+        // Gestion des bords du terrain
         if (newBoxPosition.x > groundSize / 2 || newBoxPosition.x < -groundSize / 2) {
             boxDirection.x *= -1;
+            newBoxPosition.x = Math.max(Math.min(newBoxPosition.x, groundSize / 2), -groundSize / 2);
         }
         if (newBoxPosition.z > groundSize / 2 || newBoxPosition.z < -groundSize / 2) {
             boxDirection.z *= -1;
+            newBoxPosition.z = Math.max(Math.min(newBoxPosition.z, groundSize / 2), -groundSize / 2);
         }
-        box.position.addInPlace(boxDirection.normalize().scale(boxSpeed)); // Normalise la direction et déplace le cube
+
+        // Maintient la position y constante
+        newBoxPosition.y = box.position.y;
+
+        box.position = newBoxPosition;
     }
 
     function updateSphere() {
@@ -161,13 +184,22 @@ function initializeBehavior7() {
         return futurePosition.subtract(pursuer.position);
     }
 
-    function evade(pursuer, evader) {
-        // Calcul de la position future du poursuivant
-        let prediction = sphereDirection.copy().scale(distancePrediction);
-        let futurePosition = pursuer.position.add(prediction);
+    function evade(pursuers, evader) {
+        let evadeForce = new BABYLON.Vector3(0, 0, 0);
 
-        // Calcul de la force d'évasion
-        return evader.position.subtract(futurePosition);
+        pursuers.forEach(pursuer => {
+            let toPursuer = pursuer.position.subtract(evader.position);
+            let distance = toPursuer.length();
+
+            // Calcule une force d'évasion inversement proportionnelle à la distance
+            if (distance < groundSize / 4) {  // Seuil de réaction
+                let evadeStrength = 1 - (distance / (groundSize / 4));
+                evadeForce.addInPlace(toPursuer.normalize().scale(-evadeStrength));
+            }
+        });
+
+        evadeForce.y = 0; // Assurez-vous que l'évasion reste sur le plan du sol
+        return evadeForce;
     }
 
     function avoidOtherSerpents(serpent, allSerpents) {
