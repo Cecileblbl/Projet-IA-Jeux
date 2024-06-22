@@ -5,18 +5,20 @@ class ArrivalB {
     this.distance = distance;
     this.slowdown = slowdown;
     this.debug = false;
+    this.targetType = "fixed"; // Default target type is fixed
   }
 
   calculateForce(entity) {
-    let force = p5.Vector.sub(this.target, entity.pos);
+    if (this.targetType !== "fixed") {
+      this.target.update();
+    }
+    let force = p5.Vector.sub(this.target.pos, entity.pos);
     let distance = force.mag();
 
-    // Si l'entité est à moins de 'distance' de la cible, on commence à ralentir
     if (distance < this.distance) {
       let speed = entity.maxSpeed * (distance / this.distance) * this.slowdown;
       force.setMag(speed);
     } else {
-      // Sinon, on continue à chercher normalement
       force.setMag(entity.maxSpeed);
     }
 
@@ -26,28 +28,42 @@ class ArrivalB {
   }
 
   draw() {
-    // draw target
-    ellipse(this.target.x, this.target.y, 10, 10);
+    ellipse(this.target.pos.x, this.target.pos.y, 10, 10);
   }
 
   drawDebug(entity) {
-    // Draw the slowing down zone around the target
     stroke("red");
     noFill();
-    ellipse(this.target.x, this.target.y, this.distance * 2);
+    ellipse(this.target.pos.x, this.target.pos.y, this.distance * 2);
   }
 
   UIdisplay(parentElement) {
-    console.log("UI DISPLAY");
     const behaviorDiv = document.createElement("div");
-    behaviorDiv.className = "container"; // Add container class to the main div
+
+    const targetTypeSelect = document.createElement("select");
+    targetTypeSelect.innerHTML = `
+      <option value="fixed">Fixed</option>
+      <option value="wandering">Wandering</option>
+      <option value="mouse">Mouse</option>
+    `;
+    targetTypeSelect.addEventListener("change", (e) => {
+      this.targetType = e.target.value;
+      this.updateTarget();
+      this.updateUI(behaviorDiv);
+    });
+
+    behaviorDiv.appendChild(targetTypeSelect);
+
+    this.updateUI(behaviorDiv);
+
+    behaviorDiv.className = "container";
 
     const createSlider = (labelText, min, max, step, value, onChange) => {
       const container = document.createElement("div");
-      container.className = "range-slider"; // Add range-slider class to each slider container
+      container.className = "range-slider";
 
       const boxMinMax = document.createElement("div");
-      boxMinMax.className = "box-minmax"; // Add box-minmax class to the min-max container
+      boxMinMax.className = "box-minmax";
 
       const label = document.createElement("span");
       label.textContent = `${labelText} (${min} - ${max}) `;
@@ -61,7 +77,7 @@ class ArrivalB {
       slider.max = max;
       slider.step = step;
       slider.value = value;
-      slider.className = "rs-range"; // Add rs-range class to the slider
+      slider.className = "rs-range";
 
       const valueLabel = document.createElement("span");
       valueLabel.className = "rs-label";
@@ -71,7 +87,6 @@ class ArrivalB {
         const newValue = parseFloat(e.target.value);
         valueSpan.textContent = newValue;
         valueLabel.textContent = newValue;
-        console.log(`${labelText} value: ${newValue}`); // Log the title and new value
         onChange(e);
       });
 
@@ -105,24 +120,58 @@ class ArrivalB {
 
     const debugButton = document.createElement("button");
     debugButton.textContent = "Activate Debug";
-    debugButton.style.backgroundColor = "#4a90e2"; // Blue background color
-    debugButton.style.color = "white"; // White text color
+    debugButton.style.backgroundColor = "#4a90e2";
+    debugButton.style.color = "white";
 
     debugButton.addEventListener("click", () => {
-      console.log("Debug mode" + this.debug);
       this.debug = !this.debug;
       debugButton.textContent = this.debug
         ? "Deactivate Debug"
         : "Activate Debug";
-      if (this.debug) {
-        debugButton.style.backgroundColor = "#d62929"; // Red background color
-      } else {
-        debugButton.style.backgroundColor = "#4a90e2"; // Blue background color
-      }
+      debugButton.style.backgroundColor = this.debug ? "#d62929" : "#4a90e2";
     });
 
     behaviorDiv.appendChild(debugButton);
 
     parentElement.appendChild(behaviorDiv);
+  }
+
+  updateTarget() {
+    if (this.targetType === "fixed") {
+      this.target = new fixedTarget();
+    } else if (this.targetType === "wandering") {
+      this.target = new Target(random(width), random(height));
+    } else if (this.targetType === "mouse") {
+      this.target = new Mouse();
+    }
+  }
+
+  updateUI(behaviorDiv) {
+    // Remove existing inputs if they exist
+    const existingXInput = document.querySelector("#targetPositionXInput");
+    const existingYInput = document.querySelector("#targetPositionYInput");
+    if (existingXInput) existingXInput.remove();
+    if (existingYInput) existingYInput.remove();
+
+    // Add new inputs if the target type is fixed
+    if (this.targetType === "fixed") {
+      const targetPositionXInput = document.createElement("input");
+      targetPositionXInput.type = "number";
+      targetPositionXInput.value = this.target.pos.x;
+      targetPositionXInput.id = "targetPositionXInput";
+      targetPositionXInput.addEventListener("input", (e) => {
+        this.target.updateX(parseFloat(e.target.value));
+      });
+      behaviorDiv.appendChild(targetPositionXInput);
+
+      const targetPositionYInput = document.createElement("input");
+      targetPositionYInput.type = "number";
+      targetPositionYInput.value = this.target.pos.y;
+      targetPositionYInput.id = "targetPositionYInput";
+      targetPositionYInput.addEventListener("input", (e) => {
+        this.target.updateY(parseFloat(e.target.value));
+      });
+      behaviorDiv.appendChild(targetPositionYInput);
+    }
   }
 }
