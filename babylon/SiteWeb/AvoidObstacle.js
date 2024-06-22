@@ -6,9 +6,10 @@ function initializeBehavior3() {
     let box; // La boule verte
     let inputStates = {}; // États des entrées
     let obstacles = []; // Tableau pour stocker les obstacles
-    let slowDownRadius = 10; // Rayon pour ralentir progressivement le véhicule
+    let slowDownRadius = 12; // Rayon pour ralentir progressivement le véhicule
     let avoidRadius = 10; // Rayon pour éviter les obstacles
     let vehicles = []; // Tableau pour stocker les véhicules (serpents)
+    let showAvoidance = false; // Variable de contrôle pour la visualisation de l'évitement
 
     class Vehicle {
         constructor(scene, initialPosition, target) {
@@ -17,7 +18,7 @@ function initializeBehavior3() {
             this.velocity = new BABYLON.Vector3.Zero();
             this.acceleration = new BABYLON.Vector3.Zero();
             this.maxSpeed = 0.2; // Vitesse maximale du véhicule
-            this.maxForce = 0.1; // Force maximale appliquée pour changer de direction
+            this.maxForce = 0.2; // Force maximale appliquée pour changer de direction
             this.target = target;
             this.segments = [];
 
@@ -38,6 +39,9 @@ function initializeBehavior3() {
                 segment.material = material;
                 this.segments.push(segment);
             }
+
+            // Stocker la dernière rotation lorsque le véhicule est arrêté
+            this.lastRotation = 0;
         }
 
         applyForce(force) {
@@ -54,14 +58,23 @@ function initializeBehavior3() {
 
             this.mesh.position.copyFrom(this.position);
             this.acceleration.scaleInPlace(0);
-            this.mesh.rotation.y = Math.atan2(this.velocity.x, this.velocity.z);
+
+            if (this.velocity.length() > 0.01) {
+                // Store the last known rotation when the vehicle is moving
+                this.lastRotation = Math.atan2(this.velocity.x, this.velocity.z);
+                this.mesh.rotation.y = this.lastRotation;
+            } else {
+                // If the vehicle is stopped, rotate towards the target
+                let direction = this.target.subtract(this.position).normalize();
+                this.mesh.rotation.y = Math.atan2(direction.x, direction.z);
+            }
 
             let prev = this.mesh;
             for (let i = 0; i < this.segments.length; i++) {
                 let segment = this.segments[i];
                 let toPrev = prev.position.subtract(segment.position);
                 let dist = toPrev.length();
-                let desiredDist = 2;
+                let desiredDist = 2
 
                 if (dist > desiredDist) {
                     toPrev.normalize().scaleInPlace(dist - desiredDist);
@@ -78,10 +91,12 @@ function initializeBehavior3() {
             }
         }
 
+
+
         seek(target) {
             let desired = target.subtract(this.position);
             let dist = desired.length();
-            if (dist < 1) {
+            if (dist < 3) {
                 this.velocity = BABYLON.Vector3.Zero();
                 this.acceleration = BABYLON.Vector3.Zero();
                 return;
@@ -112,7 +127,7 @@ function initializeBehavior3() {
                 }
             });
             if (!avoidanceForce.equals(BABYLON.Vector3.Zero())) {
-                avoidanceForce.normalize().scaleInPlace(this.maxForce);
+                avoidanceForce.scaleInPlace(this.maxForce);
                 this.applyForce(avoidanceForce);
             }
         }
@@ -132,6 +147,46 @@ function initializeBehavior3() {
             if (!avoidanceForce.equals(BABYLON.Vector3.Zero())) {
                 avoidanceForce.normalize().scaleInPlace(this.maxForce / 10); // Moins de force pour les segments
                 segment.position.addInPlace(avoidanceForce);
+            }
+        }
+
+        avoidVehicles(vehicles) {
+            let desiredSeparation = 10; // Distance souhaitée entre les véhicules
+            let steer = new BABYLON.Vector3(0, 0, 0);
+            let count = 0;
+
+            vehicles.forEach(other => {
+                if (other !== this) {
+                    let dist = BABYLON.Vector3.Distance(this.position, other.position);
+                    if (dist > 0 && dist < desiredSeparation) {
+                        let diff = this.position.subtract(other.position);
+                        diff.scaleInPlace(1 / dist); // pondérer par la distance
+                        steer.addInPlace(diff);
+                        count++;
+
+                        // Visualiser les vecteurs d'évitement si showAvoidance est activé
+                        if (showAvoidance) {
+                            let line = BABYLON.MeshBuilder.CreateLines("line", {
+                                points: [
+                                    this.position,
+                                    this.position.add(diff.normalize().scale(2))
+                                ]
+                            }, this.scene);
+                            line.color = new BABYLON.Color3(1, 0, 0); // Rouge pour les vecteurs d'évitement
+                        }
+                    }
+                }
+            });
+
+            if (count > 0) {
+                steer.scaleInPlace(1 / count);
+            }
+
+            if (steer.length() > 0) {
+                steer.scaleInPlace(this.maxSpeed);
+                steer.subtractInPlace(this.velocity);
+                steer.scaleInPlace(this.maxForce);
+                this.applyForce(steer);
             }
         }
     }
@@ -251,6 +306,7 @@ function initializeBehavior3() {
         inputStates.right = false;
         inputStates.up = false;
         inputStates.down = false;
+        inputStates.debug = false; // État pour la touche "D"
 
         window.addEventListener('keydown', (event) => {
             switch (event.key) {
@@ -280,6 +336,10 @@ function initializeBehavior3() {
                         let initialPosition = new BABYLON.Vector3(Math.random() * 40 - 20, 2, Math.random() * 40 - 20);
                         createVehicle(initialPosition);
                     }
+                    break;
+                case "d":
+                case "D":
+                    showAvoidance = !showAvoidance; // Basculer l'état de la visualisation
                     break;
             }
             event.preventDefault();
@@ -334,6 +394,7 @@ function initializeBehavior3() {
         vehicles.forEach(vehicle => {
             vehicle.seek(box.position);
             vehicle.avoid(obstacles);
+            vehicle.avoidVehicles(vehicles);
             vehicle.update();
         });
         scene.render();

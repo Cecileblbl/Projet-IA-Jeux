@@ -13,7 +13,7 @@ function initializeBehavior9() {
             // Définir une vélocité initiale aléatoire
             this.velocity = new BABYLON.Vector3(Math.random() - 0.5, 0, Math.random() - 0.5).normalize();
             // Définir la vitesse de déplacement du véhicule
-            this.speed = 0.09;
+            this.speed = 0.02;
             // Angle utilisé pour le comportement wander
             this.wanderAngle = 3;
 
@@ -69,7 +69,7 @@ function initializeBehavior9() {
         }
 
         wander() {
-            let change = 0.6; // Variation maximale de l'angle
+            let change = 0.2; // Variation maximale de l'angle
             this.wanderAngle += (Math.random() * 2 * change - change); // Changement aléatoire de l'angle
 
             // Calcul du centre du cercle de wander devant le véhicule

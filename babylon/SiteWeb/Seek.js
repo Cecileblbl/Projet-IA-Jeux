@@ -27,7 +27,6 @@ function initializeBehavior8() {
         let scene = new BABYLON.Scene(engine);
         scene.clearColor = new BABYLON.Color3(0.8, 0.9, 1); // Couleur de fond bleu clair
 
-
         // Ajoute une skybox
         var skybox = BABYLON.MeshBuilder.CreateBox("skyBox", {size:1000.0}, scene);
         var skyboxMaterial = new BABYLON.StandardMaterial("skyBox", scene);
@@ -35,7 +34,6 @@ function initializeBehavior8() {
         skyboxMaterial.backFaceCulling = false;
         skyboxMaterial.diffuseColor = new BABYLON.Color3(0.9, 0.5, 0.3);
         skybox.material = skyboxMaterial;
-
 
         // Pyramid that will follow the sphere
         sphere = BABYLON.MeshBuilder.CreateCylinder("myPyramid", {diameterTop: 0, diameterBottom: 4, height: 4, tessellation: 4}, scene);
@@ -259,6 +257,9 @@ function initializeBehavior8() {
         serpent.head.position.addInPlace(moveVectorForHead);
         serpent.head.rotation.y = Math.atan2(directionToBox.x, directionToBox.z);
 
+        // Évitement des autres serpents
+        avoidVehicles(serpent);
+
         // Boucle pour mettre à jour chaque segment à partir du premier
         for (let i = 0; i < serpent.segments.length; i++) {
             let leader = i === 0 ? serpent.head : serpent.segments[i - 1];
@@ -267,6 +268,33 @@ function initializeBehavior8() {
             let moveVector = desiredPosition.subtract(serpent.segments[i].position).scale(followSpeed);
             serpent.segments[i].position.addInPlace(moveVector);
             serpent.segments[i].lookAt(leader.position);
+        }
+    }
+
+    function avoidVehicles(currentSerpent) {
+        let desiredSeparation = 6; // Distance souhaitée entre les serpents
+        let steer = new BABYLON.Vector3(0, 0, 0);
+        let count = 0;
+
+        serpents.forEach(otherSerpent => {
+            if (otherSerpent !== currentSerpent) {
+                let dist = BABYLON.Vector3.Distance(currentSerpent.head.position, otherSerpent.head.position);
+                if (dist > 0 && dist < desiredSeparation) {
+                    let diff = currentSerpent.head.position.subtract(otherSerpent.head.position);
+                    diff.scaleInPlace(1 / dist); // pondérer par la distance
+                    steer.addInPlace(diff);
+                    count++;
+                }
+            }
+        });
+
+        if (count > 0) {
+            steer.scaleInPlace(1 / count);
+        }
+
+        if (steer.length() > 0) {
+            steer.scaleInPlace(currentSerpent.followSpeed * 2); // Adjust the scale factor if needed
+            currentSerpent.head.position.addInPlace(steer);
         }
     }
 

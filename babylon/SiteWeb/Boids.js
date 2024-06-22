@@ -4,7 +4,7 @@ function initializeBehavior2() {
     let scene;
     let boids = [];
     let groundSize = 100; // Assuming the ground is a 100x100 square
-    const MIN_SPEED = 1; // Minimum speed to ensure boids are always moving
+    const MIN_SPEED = 0.2; // Minimum speed to ensure boids are always moving
 
     // Get sliders
     let alignSlider = document.getElementById("alignSlider");
@@ -29,10 +29,10 @@ function initializeBehavior2() {
             this.scene = scene;
             this.position = new BABYLON.Vector3(Math.random() * groundSize - groundSize / 2, 1, Math.random() * groundSize - groundSize / 2);
             this.velocity = new BABYLON.Vector3(Math.random() * 2 - 1, 0, Math.random() * 2 - 1);
-            this.velocity.normalize().scaleInPlace(Math.random() * 2 + 2);
+            this.velocity.normalize().scaleInPlace(Math.random() * 1 + 1); // Reduced speed
             this.acceleration = new BABYLON.Vector3();
-            this.maxForce = 0.2;
-            this.maxSpeed = 5;
+            this.maxForce = 0.5; // Reduced force
+            this.maxSpeed = 1; // Reduced max speed
 
             // Create a mesh for the boid
             this.mesh = BABYLON.MeshBuilder.CreateSphere("boid", { diameter: 1 }, scene);
@@ -68,7 +68,7 @@ function initializeBehavior2() {
         }
 
         separation(boids) {
-            let perceptionRadius = 24;
+            let perceptionRadius = 25;
             let steering = new BABYLON.Vector3();
             let total = 0;
             for (let other of boids) {
@@ -90,7 +90,7 @@ function initializeBehavior2() {
         }
 
         cohesion(boids) {
-            let perceptionRadius = 50;
+            let perceptionRadius = 25;
             let steering = new BABYLON.Vector3();
             let total = 0;
             for (let other of boids) {

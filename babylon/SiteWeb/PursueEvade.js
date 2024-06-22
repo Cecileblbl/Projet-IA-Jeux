@@ -8,9 +8,11 @@ function initializeBehavior7() {
     let groundSize = 100; // Taille du terrain
     let boxSpeed = 0.3; // Vitesse de déplacement du cube
     let boxDirection = new BABYLON.Vector3(Math.random() - 0.5, 0, Math.random() - 0.5).normalize(); // Direction initiale aléatoire
+    let sphereDirection = new BABYLON.Vector3(0, 0, 0); // Direction initiale de la sphère
     let segments = []; // Segments du serpent
     let serpents = []; // Liste des serpents
     let inputStates = {}; // États d'entrée
+    let distancePrediction = 2; // Distance de prédiction pour la poursuite et l'évasion
 
     // Fonction pour démarrer le jeu
     function startGame() {
@@ -108,23 +110,24 @@ function initializeBehavior7() {
 
     function moveBoxContinuously() {
         let boxSpeed = 0.4; // vitesse de déplacement du cube
-        box.position.addInPlace(boxDirection.scale(boxSpeed)); // Déplace le cube dans la direction actuelle
+        let newBoxPosition = box.position.add(boxDirection.scale(boxSpeed)); // Déplace le cube dans la direction actuelle
 
         // Vérifie si le cube atteint les limites du terrain et change de direction si nécessaire
-        if (box.position.x > groundSize / 2 || box.position.x < -groundSize / 2) {
+        if (newBoxPosition.x > groundSize / 2 || newBoxPosition.x < -groundSize / 2) {
             boxDirection.x *= -1;
         }
-        if (box.position.z > groundSize / 2 || box.position.z < -groundSize / 2) {
+        if (newBoxPosition.z > groundSize / 2 || newBoxPosition.z < -groundSize / 2) {
             boxDirection.z *= -1;
         }
-        boxDirection = boxDirection.normalize(); // Normalise la direction
+        box.position.addInPlace(boxDirection.normalize().scale(boxSpeed)); // Normalise la direction et déplace le cube
     }
 
     function updateSphere() {
         let speed = 0.3; // Vitesse de déplacement de la tête du serpent
 
         // Calcule la direction de la sphère pour poursuivre la boîte
-        let direction = box.position.subtract(sphere.position).normalize().scale(speed);
+        let direction = pursue(box, sphere).normalize().scale(speed);
+        sphereDirection = direction; // Mise à jour de la direction de la sphère
         sphere.position.addInPlace(direction);
         sphere.rotation.y = Math.atan2(direction.x, direction.z);
 
@@ -146,6 +149,95 @@ function initializeBehavior7() {
 
             //Oriente chaque segment pour regarder vers son leader
             segments[i].lookAt(leader.position);
+        }
+    }
+
+    function pursue(target, pursuer) {
+        // Calcul de la position future de la cible
+        let prediction = boxDirection.clone().scale(distancePrediction);
+        let futurePosition = target.position.add(prediction);
+
+        // Calcul de la force de poursuite
+        return futurePosition.subtract(pursuer.position);
+    }
+
+    function evade(pursuer, evader) {
+        // Calcul de la position future du poursuivant
+        let prediction = sphereDirection.copy().scale(distancePrediction);
+        let futurePosition = pursuer.position.add(prediction);
+
+        // Calcul de la force d'évasion
+        return evader.position.subtract(futurePosition);
+    }
+
+    function avoidOtherSerpents(serpent, allSerpents) {
+        let desiredSeparation = 10; // Distance souhaitée entre les serpents
+        let steer = new BABYLON.Vector3(0, 0, 0);
+        let count = 0;
+
+        allSerpents.forEach(other => {
+            if (other !== serpent) {
+                let d = BABYLON.Vector3.Distance(serpent.head.position, other.head.position);
+                if (d > 0 && d < desiredSeparation) {
+                    let diff = serpent.head.position.subtract(other.head.position).normalize();
+                    diff.scaleInPlace(1 / d); // Pondérer par la distance
+                    steer.addInPlace(diff);
+                    count++;
+                }
+            }
+        });
+
+        if (count > 0) {
+            steer.scaleInPlace(1 / count);
+        }
+
+        if (steer.length() > 0) {
+            steer.normalize();
+            steer.scaleInPlace(serpent.followSpeed); // Ajuster la force d'évitement en fonction de la vitesse de suivi
+        }
+
+        return steer;
+    }
+
+    function updateScene() {
+        serpents.forEach(serpent => {
+            updateSerpent(serpent);
+        });
+    }
+
+    function updateSerpent(serpent) {
+        let speed = 0.1; // Vitesse de déplacement de la tête du serpent
+
+        // Calcule la direction de la tête du serpent pour poursuivre la boîte
+        let pursueDirection = pursue(box, serpent.head).normalize().scale(speed);
+
+        // Calcule la force d'évitement pour éviter les autres serpents
+        let avoidForce = avoidOtherSerpents(serpent, serpents);
+
+        // Combine la direction de poursuite et la force d'évitement
+        let combinedForce = pursueDirection.add(avoidForce);
+
+        serpent.head.position.addInPlace(combinedForce);
+        serpent.head.rotation.y = Math.atan2(combinedForce.x, combinedForce.z);
+
+        let followSpeed = 0.1; // Vitesse à laquelle les segments suivent la tête ou le segment précédent
+        let distanceBetweenSegments = 2; // Distance souhaitée entre les segments
+
+        // Mise à jour de la position des segments pour suivre la tête ou le segment précédent
+        for (let i = 0; i < serpent.segments.length; i++) {
+            let leader = i === 0 ? serpent.head : serpent.segments[i - 1]; // Le leader est soit la tête soit le segment précédent
+            let leaderPos = leader.position;
+
+            // Calcule la direction et la distance idéale du segment actuel vers son leader
+            let directionToLeader = leaderPos.subtract(serpent.segments[i].position).normalize();
+            let desiredPosition = leaderPos.subtract(directionToLeader.scale(distanceBetweenSegments));
+
+            // Calcule le vecteur de déplacement nécessaire pour atteindre la position idéale
+            let moveVector = desiredPosition.subtract(serpent.segments[i].position).scale(followSpeed);
+            serpent.segments[i].position.addInPlace(moveVector);
+
+            // Oriente chaque segment pour regarder vers son leader
+            serpent.segments[i].lookAt(leader.position);
         }
     }
 
@@ -325,12 +417,19 @@ function initializeBehavior7() {
     }
 
     function updateSerpent(serpent) {
-        let speed = 0.3; // Vitesse de déplacement de la tête du serpent
+        let speed = 0.2; // Vitesse de déplacement de la tête du serpent
 
         // Calcule la direction de la tête du serpent pour poursuivre la boîte
-        let direction = box.position.subtract(serpent.head.position).normalize().scale(speed);
-        serpent.head.position.addInPlace(direction);
-        serpent.head.rotation.y = Math.atan2(direction.x, direction.z);
+        let pursueDirection = pursue(box, serpent.head).normalize().scale(speed);
+
+        // Calcule la force d'évitement pour éviter les autres serpents
+        let avoidForce = avoidOtherSerpents(serpent, serpents);
+
+        // Combine la direction de poursuite et la force d'évitement
+        let combinedForce = pursueDirection.add(avoidForce);
+
+        serpent.head.position.addInPlace(combinedForce);
+        serpent.head.rotation.y = Math.atan2(combinedForce.x, combinedForce.z);
 
         let followSpeed = 0.1; // Vitesse à laquelle les segments suivent la tête ou le segment précédent
         let distanceBetweenSegments = 2; // Distance souhaitée entre les segments
@@ -353,6 +452,7 @@ function initializeBehavior7() {
         }
     }
 
+
     // Initialisation de la scène et du moteur
     startGame();
 
@@ -361,3 +461,5 @@ function initializeBehavior7() {
         engine.resize();
     });
 }
+
+
