@@ -7,40 +7,40 @@ Ce fichier  regroupe plusieurs scripts JavaScript utilisant Babylon.js pour simu
 
 ### Arrival.js
 
-Simule une animations avec une boule contrôlable et des serpents dynamiques. [Voir le README complet](./Arrival.md)
+Simule une animations avec une boule contrôlable et des serpents dynamiques. [Voir le README complet](./SiteWeb/Arrival.md)
 
 ### AStar.js
 
-Implémente l'algorithme A* pour trouver un chemin optimal ( plus court) sur un terrain en 3D. [Voir le README complet](./AStar.md)
+Implémente l'algorithme A* pour trouver un chemin optimal ( plus court) sur un terrain en 3D. [Voir le README complet](./SiteWeb/AStar.md)
 
 ### AvoidObstacle.js
 
-Simule des véhicules qui évitent des obstacles tout en se déplaçant vers une cible. [Voir le README complet](./AvoidObstacle.md)
+Simule des véhicules qui évitent des obstacles tout en se déplaçant vers une cible. [Voir le README complet](./SiteWeb/AvoidObstacle.md)
 
 ### Boids.js
 
-Simule un groupe de boids suivant des comportements d'alignement, de cohésion et de séparation. [Voir le README complet](./Boids.md)
+Simule un groupe de boids suivant des comportements d'alignement, de cohésion et de séparation. [Voir le README complet](./SiteWeb/Boids.md)
 
 ### PathFollow.js
 
-Simule un véhicule suivant un chemin si il le rencontre. [Voir le README complet](./PathFollow.md)
+Simule un véhicule suivant un chemin si il le rencontre. [Voir le README complet](./SiteWeb/PathFollow.md)
 
 ### PathFollowComplex.js
 
-Simule des véhicules suivant un chemin complexe . [Voir le README complet](./PathFollowComplex.md)
+Simule des véhicules suivant un chemin complexe . [Voir le README complet](./SiteWeb/PathFollowComplex.md)
 
 ### ScalarProjection.js
 
-Illustre la projection scalaire en visualisant la projection d'une sphère sur un vecteur. [Voir le README complet](./ScalarProjection.md)
+Illustre la projection scalaire en visualisant la projection d'une sphère sur un vecteur. [Voir le README complet](./SiteWeb/ScalarProjection.md)
 
 ### PursueEvade.js
 
-Simule des comportements de poursuite et d'évasion en 3D avec des serpents et des cibles. [Voir le README complet](./PursueEvade.md)
+Simule des comportements de poursuite et d'évasion en 3D avec des serpents et des cibles. [Voir le README complet](./SiteWeb/PursueEvade.md)
 
 ### Seek.js
 
-Simule un comportement de recherche  avec une pyramide poursuivant une sphère et des serpents générés. [Voir le README complet](./Seek.md)
+Simule un comportement de recherche  avec une pyramide poursuivant une sphère et des serpents générés. [Voir le README complet](./SiteWeb/Seek.md)
 
 ### Wander.js
 
-Simule des comportements d'errance avec plusieurs véhicules errant de manière autonome. [Voir le README complet](./Wander.md)
+Simule des comportements d'errance avec plusieurs véhicules errant de manière autonome. [Voir le README complet](./SiteWeb/Wander.md)
