@@ -3,6 +3,8 @@
 Ce fichier  regroupe plusieurs scripts JavaScript utilisant Babylon.js pour simuler différents comportements en 3D. Chaque script met en scène des entités avec des comportements spécifiques comme la poursuite, l'évasion, l'errance, et plus encore. Ce README principal fournit une vue d'ensemble du projet.
 
 
+Lien de la page Web qui regroupe tous les comportements : [Site Web](https://projet-ia-jeux.onrender.com/)
+
 ## Scripts dans le fichier SiteWeb ( fichier principal regroupant fichiers pour siteweb)
 
 ### Arrival.js
