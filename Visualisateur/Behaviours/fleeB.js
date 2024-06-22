@@ -2,6 +2,7 @@ class FleeB {
   constructor(target) {
     this.target = target;
     this.magnitude = 1;
+    this.debug = false;
   }
   calculateForce(entity) {
     // on calcule la direction vers la cible
@@ -24,7 +25,7 @@ class FleeB {
     ellipse(this.target.x, this.target.y, 10, 10);
   }
 
-  debug(entity) {
+  drawDebug(entity) {
     // Draw a line from entity to target
     stroke(255, 0, 0);
     line(this.target.x, this.target.y, entity.pos.x, entity.pos.y);

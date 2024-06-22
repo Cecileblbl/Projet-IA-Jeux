@@ -31,10 +31,10 @@ function setup() {
   obstacles.push(new Obstacle(100, 100, 50));
 
   //Wander behaviour on init
-  Bkeeper.addB("wander");
-  Bkeeper.addB("obstacleAvoidance");
-  Bkeeper.addB("Bordures");
-  Bkeeper.addB("pursue");
+  Bkeeper.addB("arrival");
+  // Bkeeper.addB("obstacleAvoidance");
+  // Bkeeper.addB("Bordures");
+  // Bkeeper.addB("pursue");
   displayBs(Bkeeper.Bs);
 }
 

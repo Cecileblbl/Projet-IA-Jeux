@@ -2,6 +2,7 @@ class SeekB {
   constructor(target) {
     this.target = target;
     this.magnitude = 1;
+    this.debug = false;
   }
 
   calculateForce(entity) {
@@ -25,7 +26,7 @@ class SeekB {
     ellipse(this.target.x, this.target.y, 10, 10);
   }
 
-  debug(entity) {
+  drawDebug(entity) {
     // Step 1: Calculate the direction towards the target
     let force = p5.Vector.sub(this.target, entity.pos);
 

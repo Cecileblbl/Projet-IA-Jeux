@@ -6,6 +6,7 @@ class Bordures {
     this.zoneHeight = height;
     this.d = d;
     this.magnitude = 1;
+    this.debug = false;
   }
 
   calculateForce(entity) {
@@ -80,5 +81,5 @@ class Bordures {
     );
   }
 
-  debug(entity) {}
+  drawDebug(entity) {}
 }

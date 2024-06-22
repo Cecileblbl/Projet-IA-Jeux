@@ -11,6 +11,7 @@ class WanderB {
     this.wanderTheta = wanderTheta;
     this.displaceRange = displaceRange;
     this.magnitude = magnitude;
+    this.debug = false;
   }
 
   calculateForce(entity) {
@@ -32,7 +33,7 @@ class WanderB {
   }
   draw() {}
 
-  debug(entity) {
+  drawDebug(entity) {
     // Draw the wander radius
     noFill();
     stroke(0, 255, 0); // Green color for radius

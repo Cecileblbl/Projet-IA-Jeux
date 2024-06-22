@@ -2,6 +2,7 @@ class EvadeB {
   constructor(target) {
     this.target = target;
     this.magniture = 1;
+    this.debug = false;
   }
 
   calculateForce(entity) {
@@ -34,7 +35,7 @@ class EvadeB {
     ellipse(this.target.pos.x, this.target.pos.y, 10, 10);
   }
 
-  debug(entity) {
+  drawDebug(entity) {
     // Dessiner la cible future prédite
     let prediction = this.target.vel.copy();
     prediction.mult(10);

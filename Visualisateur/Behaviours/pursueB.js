@@ -3,6 +3,7 @@ class PursueB {
     this.target = target;
     this.distancePrediction = distancePrediction;
     this.magnitude = 1;
+    this.debug = false;
   }
 
   calculateForce(entity) {
@@ -34,7 +35,7 @@ class PursueB {
     ellipse(this.target.pos.x, this.target.pos.y, 10, 10);
   }
 
-  debug(entity) {
+  drawDebug(entity) {
     // Step 1: Calculate the future position of the target
     let futurePos = this.target.pos.copy();
     let prediction = this.target.vel.copy().mult(this.distancePrediction);

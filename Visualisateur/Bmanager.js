@@ -12,8 +12,8 @@ class BManager {
       vehicle.applyForce(force);
 
       Bs[i].draw();
-      if (debug) {
-        Bs[i].debug(vehicle);
+      if (Bs[i].debug === true) {
+        Bs[i].drawDebug(vehicle);
       }
     }
   }

@@ -2,28 +2,12 @@ Bkeeper = new Bkeeper();
 
 let isPaused = false;
 
-let debug = false;
-
 document.getElementById("pauseButton").addEventListener("click", function () {
   isPaused = !isPaused;
   this.textContent = isPaused ? "Resume" : "Pause";
 
   // Change button style based on isPaused
   if (isPaused) {
-    this.style.backgroundColor = "#d62929"; // Red background color
-    this.style.color = "white"; // White text color
-  } else {
-    this.style.backgroundColor = "#4a90e2"; // Blue background color
-    this.style.color = "white"; // White text color
-  }
-});
-
-document.getElementById("debugButton").addEventListener("click", function () {
-  debug = !debug;
-  this.textContent = debug ? "Deactivate Debug" : "Activate Debug";
-
-  // Change button style based on isPaused
-  if (debug) {
     this.style.backgroundColor = "#d62929"; // Red background color
     this.style.color = "white"; // White text color
   } else {
@@ -135,44 +119,9 @@ function displayBs(Bs) {
     });
     behaviorDiv.appendChild(removeButton);
 
-    // Iterate over behavior parameters
-    for (var key in B) {
-      if (B.hasOwnProperty(key) && typeof B[key] !== "function") {
-        var parameterDiv = document.createElement("div");
-        var parameterLabel = document.createElement("label");
-        parameterLabel.textContent = key + ": ";
-        var parameterInput = document.createElement("input");
-        parameterInput.type = "text";
+    B.UIdisplay(behaviorDiv);
 
-        // Check if the current property is 'target'
-        if (key === "target" && B[key] instanceof p5.Vector) {
-          // Stringify the vector object
-          parameterInput.value = JSON.stringify(B[key].array());
-        } else {
-          parameterInput.value = B[key];
-        }
-
-        parameterInput.addEventListener("change", function (event) {
-          if (key === "target" && B[key] instanceof p5.Vector) {
-            // Parse the input value back to a vector object
-            var vectorArray = JSON.parse(event.target.value);
-            B[key] = createVector(
-              vectorArray[0],
-              vectorArray[1],
-              vectorArray[2]
-            );
-          } else {
-            B[key] = event.target.value;
-            console.log;
-          }
-        });
-
-        parameterDiv.appendChild(parameterLabel);
-        parameterDiv.appendChild(parameterInput);
-        behaviorDiv.appendChild(parameterDiv);
-      }
-    }
-
+    // Append behaviorDiv to the main container
     BInfo.appendChild(behaviorDiv);
   });
 }
