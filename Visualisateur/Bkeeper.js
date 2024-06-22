@@ -12,7 +12,7 @@ class Bkeeper {
       this.Bs.push(new ArrivalB(new fixedTarget()));
     }
     if (B === "flee") {
-      this.Bs.push(new FleeB(createVector(width / 2, height / 2)));
+      this.Bs.push(new FleeB(new Target((width / 2, height / 2))));
     }
     if (B === "wander") {
       this.Bs.push(new WanderB());
