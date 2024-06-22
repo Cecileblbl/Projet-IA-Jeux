@@ -1,42 +1,46 @@
-# Steering Behaviors en BABYLON JS
+# Projet de Simulation 3D avec Babylon.js
 
-Lien : [Site Web regroupant les comportements](https://projet-ia-jeux.onrender.com)
+Ce fichier  regroupe plusieurs scripts JavaScript utilisant Babylon.js pour simuler différents comportements en 3D. Chaque script met en scène des entités avec des comportements spécifiques comme la poursuite, l'évasion, l'errance, et plus encore. Ce README principal fournit une vue d'ensemble du projet.
 
-Ce projet utilise Babylon.js pour démontrer différents comportements de direction (steering behaviors) couramment utilisés dans l'animation et la simulation de mouvements de groupe. Ces comportements incluent l'arrivée, les boids, l'évitement d'obstacles, le suivi de chemin, la projection scalaire, la poursuite et l'évasion, la recherche, l'errance, et l'algorithme A*.
 
-## Comportements Disponibles
+## Scripts dans le fichier SiteWeb ( fichier principal regroupant fichiers pour siteweb)
 
-### 1. Comportement Arrival
-Ce comportement guide une entité vers une cible en réduisant progressivement sa vitesse à mesure qu'elle se rapproche, permettant une arrivée en douceur sans dépasser la cible.
+### Arrival.js
 
-### 2. Comportement Boids
-Les boids représentent un comportement de groupe où les entités se déplacent ensemble en suivant des règles de séparation, de cohésion et d'alignement, simulant ainsi le comportement des bancs de poissons ou des vols d'oiseaux.
+Simule une animations avec une boule contrôlable et des serpents dynamiques. [Voir le README complet](./Arrival.md)
 
-### 3. Comportement Obstacle Avoid
-L'évitement d'obstacles permet à une entité de détecter et d'éviter les obstacles sur son chemin tout en se dirigeant vers sa cible.
+### AStar.js
 
-### 4. Comportement Path Follow
-Le suivi de chemin guide une entité le long d'un chemin prédéfini, en s'assurant qu'elle reste sur le chemin et ajuste sa vitesse et sa direction en conséquence.
+Implémente l'algorithme A* pour trouver un chemin optimal ( plus court) sur un terrain en 3D. [Voir le README complet](./AStar.md)
 
-### 5. Comportement Path Follow Complex
-Semblable au suivi de chemin, mais avec des chemins plus complexes et des comportements supplémentaires pour gérer des scénarios plus compliqués.
+### AvoidObstacle.js
 
-### 6. Comportement Scalar Projection
-Ce comportement utilise la projection scalaire pour ajuster les mouvements de l'entité en fonction de vecteurs de direction et de vitesse.
+Simule des véhicules qui évitent des obstacles tout en se déplaçant vers une cible. [Voir le README complet](./AvoidObstacle.md)
 
-### 7. Comportement Pursue Evade
-La poursuite et l'évasion sont deux comportements complémentaires où une entité (le poursuivant) tente de suivre et d'attraper une autre entité (l'évité), qui essaie de s'échapper.
+### Boids.js
 
-### 8. Comportement Seek
-La recherche est un comportement simple où une entité se dirige directement vers une cible spécifique.
+Simule un groupe de boids suivant des comportements d'alignement, de cohésion et de séparation. [Voir le README complet](./Boids.md)
 
-### 9. Comportement Wander
-L'errance fait que l'entité se déplace de manière aléatoire tout en conservant une certaine direction générale, créant un mouvement plus naturel et imprévisible.
+### PathFollow.js
 
-### 10. Comportement A*
-L'algorithme A* est utilisé pour trouver le chemin le plus court entre deux points dans un espace discret, en prenant en compte les obstacles et le terrain.
+Simule un véhicule suivant un chemin si il le rencontre. [Voir le README complet](./PathFollow.md)
 
-## Remarques
+### PathFollowComplex.js
 
-- Dans les fichiers où des serpents sont créés sur la scène, il suffit de cliquer sur la touche `T` autant de fois que souhaité pour en créer de nouveaux.
-- Pour le fichier Wander, il suffit de cliquer sur la touche `D` pour afficher le vecteur de direction.
+Simule des véhicules suivant un chemin complexe . [Voir le README complet](./PathFollowComplex.md)
+
+### ScalarProjection.js
+
+Illustre la projection scalaire en visualisant la projection d'une sphère sur un vecteur. [Voir le README complet](./ScalarProjection.md)
+
+### PursueEvade.js
+
+Simule des comportements de poursuite et d'évasion en 3D avec des serpents et des cibles. [Voir le README complet](./PursueEvade.md)
+
+### Seek.js
+
+Simule un comportement de recherche  avec une pyramide poursuivant une sphère et des serpents générés. [Voir le README complet](./Seek.md)
+
+### Wander.js
+
+Simule des comportements d'errance avec plusieurs véhicules errant de manière autonome. [Voir le README complet](./Wander.md)

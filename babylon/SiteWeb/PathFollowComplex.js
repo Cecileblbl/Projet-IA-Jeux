@@ -180,7 +180,7 @@ function initializeBehavior5() {
                 closestPoint = closest;
 
                 const segmentDirection = end.subtract(start).normalize();
-                const targetDistance = Math.min(5, BABYLON.Vector3.Distance(closest, end)); // Ensure target point stays within the segment
+                const targetDistance = Math.min(5, BABYLON.Vector3.Distance(closest, end));
                 targetPoint = closest.add(segmentDirection.scale(targetDistance));
             }
         }
