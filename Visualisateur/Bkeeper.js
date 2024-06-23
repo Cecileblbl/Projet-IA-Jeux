@@ -6,7 +6,7 @@ class Bkeeper {
   addB(B) {
     // Add the selected B to the vehicle
     if (B === "seek") {
-      this.Bs.push(new SeekB(createVector(width / 2, height / 2)));
+      this.Bs.push(new SeekB(new Target((width / 2, height / 2))));
     }
     if (B === "arrival") {
       this.Bs.push(new ArrivalB(new fixedTarget()));
@@ -21,7 +21,16 @@ class Bkeeper {
       this.Bs.push(new ObstacleAvoidanceB());
     }
     if (B === "Bordures") {
-      this.Bs.push(new Bordures());
+      this.Bs.push(
+        new Bordures(
+          50, // x position of the zone (top-left corner)
+          50, // y position of the zone (top-left corner)
+          width, // width of the zone
+          height, // height of the zone
+          20, // buffer distance from edges on the x-axis
+          30 // buffer distance from edges on the y-axis
+        )
+      );
     }
     if (B === "evade") {
       this.Bs.push(new EvadeB(new Target((width / 2, height / 2))));

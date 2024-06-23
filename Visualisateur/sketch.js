@@ -31,7 +31,7 @@ function setup() {
   obstacles.push(new Obstacle(100, 100, 50));
 
   //Wander behaviour on init
-  Bkeeper.addB("flee");
+  Bkeeper.addB("Bordures");
   // Bkeeper.addB("obstacleAvoidance");
   // Bkeeper.addB("Bordures");
   // Bkeeper.addB("pursue");
