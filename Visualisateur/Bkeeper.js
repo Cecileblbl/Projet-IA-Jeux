@@ -23,8 +23,8 @@ class Bkeeper {
     if (B === "Bordures") {
       this.Bs.push(
         new Bordures(
-          50, // x position of the zone (top-left corner)
-          50, // y position of the zone (top-left corner)
+          0, // x position of the zone (top-left corner)
+          0, // y position of the zone (top-left corner)
           width, // width of the zone
           height, // height of the zone
           20, // buffer distance from edges on the x-axis

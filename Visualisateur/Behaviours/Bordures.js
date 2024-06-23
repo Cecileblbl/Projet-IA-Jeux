@@ -131,6 +131,12 @@ class Bordures {
       )
     );
 
+    behaviorDiv.appendChild(
+      createSlider("Magnitude:", 0, 1, 0.1, this.magnitude, (e) => {
+        this.magnitude = parseFloat(e.target.value);
+      })
+    );
+
     parentElement.appendChild(behaviorDiv);
 
     // Helper function to create a slider element
