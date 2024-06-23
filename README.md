@@ -28,3 +28,12 @@ Pour gérer les croisements de chemin, plusieurs stratégies peuvent être emplo
  
 Une autre technique pour gérer le croisement de chemin est le suivi de champ de flux. Cette méthode utilise un champ de vecteurs pour diriger le mouvement des entités en fonction de leur position dans l'environnement. Les entités échantillonnent la direction du flux à leur position future prévue et ajustent leur trajectoire pour s'aligner avec cette direction, minimisant ainsi les risques de collision aux points de croisement. 
 Nous avons choisi d’utiliser la première technique pour simuler le croisement de chemin. 
+
+
+# Génétiques
+
+Voiture est l'apprentissage à la conduite
+Le but est de simuler une évolution artificielle où les véhicules apprennent à piloter sur une piste aléatoire.  
+
+Missilles est l'apprentissage à atteindre une cible
+Le but est de simuler le comportement d'une population de fusées (rockets) cherchant à atteindre une cible en esquivant un obstacle
