@@ -125,6 +125,7 @@ function displayBs(Bs) {
     BInfo.appendChild(behaviorDiv);
   });
 }
+
 // Define a function to update and display data
 function updateAndDisplayData() {
   var data = document.getElementById("data");
@@ -150,18 +151,75 @@ updateAndDisplayData();
 // Set up an interval to update data periodically (every 1 second in this example)
 setInterval(updateAndDisplayData, 1000);
 
-let maxSpeedInput = document.getElementById("maxSpeed");
-maxSpeedInput.addEventListener("change", function () {
-  let newMaxSpeed = Number(maxSpeedInput.value);
-  vehicules.forEach((vehicle) => {
-    vehicle.maxSpeed = newMaxSpeed;
-  });
-});
+// Create and append the maxSpeed slider
+const datainputs = document.getElementById("datainputs");
+datainputs.appendChild(
+  createSlider("Vitesse maximale", 0, 10, 0.1, 1, function (e) {
+    let newMaxSpeed = parseFloat(e.target.value);
+    maxSpeedValue.textContent = newMaxSpeed;
+    vehicules.forEach((vehicle) => {
+      vehicle.maxSpeed = newMaxSpeed;
+    });
+  })
+);
 
-let maxForceInput = document.getElementById("maxForce");
-maxForceInput.addEventListener("change", function () {
-  let newMaxForce = Number(maxForceInput.value);
-  vehicules.forEach((vehicle) => {
-    vehicle.maxForce = newMaxForce;
+// Create and append the maxForce slider
+datainputs.appendChild(
+  createSlider("Force maximale", 0, 2, 0.1, 0.2, function (e) {
+    let newMaxForce = parseFloat(e.target.value);
+    maxForceValue.textContent = newMaxForce;
+    vehicules.forEach((vehicle) => {
+      vehicle.maxForce = newMaxForce;
+    });
+  })
+);
+
+// Helper function to create a slider element
+function createSlider(labelText, min, max, step, value, onChange) {
+  const container = document.createElement("div");
+  container.className = "range-slider";
+
+  const boxMinMax = document.createElement("div");
+  boxMinMax.className = "box-minmax";
+
+  const label = document.createElement("span");
+  label.textContent = `${labelText} (${min} - ${max}) `;
+
+  const valueSpan = document.createElement("span");
+  valueSpan.textContent = value;
+
+  const slider = document.createElement("input");
+  slider.type = "range";
+  slider.min = min;
+  slider.max = max;
+  slider.step = step;
+  slider.value = value;
+  slider.className = "rs-range";
+
+  const valueLabel = document.createElement("span");
+  valueLabel.className = "rs-label";
+  valueLabel.textContent = value;
+
+  slider.addEventListener("input", (e) => {
+    const newValue = parseFloat(e.target.value);
+    valueSpan.textContent = newValue;
+    valueLabel.textContent = newValue;
+    onChange(e);
   });
-});
+
+  boxMinMax.appendChild(label);
+  boxMinMax.appendChild(valueSpan);
+
+  container.appendChild(boxMinMax);
+  container.appendChild(slider);
+  container.appendChild(valueLabel);
+
+  // Assign the valueSpan element to a global variable for updating
+  if (labelText.includes("Vitesse maximale")) {
+    window.maxSpeedValue = valueSpan;
+  } else if (labelText.includes("Force maximale")) {
+    window.maxForceValue = valueSpan;
+  }
+
+  return container;
+}
