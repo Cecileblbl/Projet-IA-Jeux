@@ -46,3 +46,13 @@ Simule un comportement de recherche  avec une pyramide poursuivant une sphère e
 ### Wander.js
 
 Simule des comportements d'errance avec plusieurs véhicules errant de manière autonome. [Voir le README complet](./SiteWeb/Wander.md)
+
+## Remarques
+
+Par manque de temps, nous n'avons pas pu modifier les fichiers de chaque comportement dans leurs dossiers respectifs après notre appel en visio. Nous les avons directement adaptés pour le rendu final sur le site web. À l'avenir, nous pourrons les mettre à jour si nécessaire.
+
+
+
+
+
+
