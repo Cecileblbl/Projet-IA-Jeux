@@ -1,39 +1,130 @@
-# IA_Jeux
-Sujet : développer des exemples et tutoriaux sur les algorithmes utilisés pour gérer les déplacements d'entités autonomes (véhicules, PNJs etc) dans les jeux avec de l'animation à 30 ou 60 images/s (ou plus)
+# Visualisateur de Comportements - Steering Behaviors
 
-    Steering Behaviors (suivre une cible, fuir, eviter les obstacles, arriver quelque part, suivre un chemin, suivre un leader etc.) J'ai déjà de nombreux prototypes et vidéos sur le sujet. Pour cette partie il faudra implémenter et expliquer les comportements manquants (suivre un mur, faire la queue, se croiser sur une route en essayant de s'éviter)
-    Algorithme A* (utilisé par les jeux de stratégie temps réel)
-    Algorithmes génétiques (apprendre à suivre une route, apprendre à des missiles à atteindre leur cible, apprendre à survivre en milieu hostile)
-    Bien entendu tous ces comportements sont cumulables (c'est la beauté de ces algorithmes) et il faudra aussi montrer des exemples mettant en oeuvre simultanément plusieurs comportements (suivre un circuit en évitant les obstacles et en ayant un but lointain également), ou en mettant en oeuvre des arbres de décision (ma vie est basse, je fuis et je cherche à manger, ma vie est haute, je me transforme en prédateur et j'essaie de tuer les ennemis, ou bien je suis la piste car je suis pilote de course, je n'ai plus d'essence je dois m'arrêter au stand)
-    L'implémentation se fera en P5 (JavaScript adapté à l'animation et au creative coding) mais vous montrerez aussi sur un exemple ou deux qu'il est très simple de le faire en pur JavaScript.
-        Vous utiliserez dataGUI par exemple pour qu'on puisse facilement changer les paramètres des comportements et voir en live ce que cela change.
-    Et j'aimerais aussi ajouter mon grain de sel, puisque vous êtes quatre :
+Ce projet est un visualisateur interactif pour explorer et comprendre les "steering behaviors" appliqués à des véhicules simulés sur un canvas. Les utilisateurs peuvent ajouter, ajuster et combiner différents comportements pour observer leurs interactions en temps réel.
 
-        Des exemples 3D mais avec déplacements 2D dans des mini jeux BabylonJS (que vous pourrez développer pour le concours Games on Web) : course avec IA pour les autres joueurs etc, arène de survie etc.
-        Des ambiances sonores contextuelles 100% synthétisées par du code (avec WebAudio API je vous expliquerai) : l'ennemi qui me cherche se rapproche, je veux que les sons deviennent plus aigus, ma vie est basse je veux entrendre un coeur qui bat, on approche de la fin de la course, le tempo des sons générés augmente etc.
+## Technologies Utilisées
 
-        Sur les steering behaviors :
+Ce projet utilise plusieurs technologies clés pour son fonctionnement :
 
-    Regarder mon cours et les exemples du repo github : http://miageprojet2.unice.fr/Intranet_de_Michel_Buffa/Master_IA2_Casablanca_2023-2024%3a_IA_pour_les_jeux
-    Je vais vous passer une version de ce repo "augmentée" par du live coding que j'ai fait en classe lorsque j'ai donné le cours....
-    Travail à faire : lire l'article de Craig Reynolds qui est référencé dans les slides du Google doc du cours, et après avoir étudié les autres exemples de mes repos et du cours, essayer d'implémenter les comportements manquants:
-        Wall Following
-        Queuing
-        Vector Fields (il y a des implémentations dans des exemples du Coding Train, voir en-dessous des vidéos les contributions des utilisateurs)
+    HTML, CSS, JavaScript : Ces technologies de base sont utilisées pour la structure, la présentation et la fonctionnalité générale de l'application web. HTML définit la structure des pages web, CSS est utilisé pour le style et la mise en page, tandis que JavaScript assure l'interactivité et la manipulation dynamique des éléments.
 
-Pour BabylonJS :
+    p5.js : Cette bibliothèque JavaScript est spécifiquement utilisée pour la création d'animations et de visualisations interactives sur le canevas HTML5. p5.js simplifie le processus de dessin et d'animation, permettant une intégration fluide des comportements de véhicules et des interactions utilisateur.
 
-    Prendre les steering behaviors (commencer par quelques-uns des simples) et les implémenter dans le plan XZ (en 2D), avec la classe Vector3 de babylonJS, des véhicules simples (pyramides)
+## Fonctionnalités
 
-Sur le pathFinding :
+- **Ajout de Véhicules et d'Obstacles**
 
-    Expliquer l'algo A* et démo de A* + steering behaviors. Explications de A* ici: https://thecodingtrain.com/challenges/51-a-pathfinding-algorithm
-    Regarder par exemple https://github.com/matheuslrsouza/particle-filter-js
+  - Permet d'ajouter plusieurs véhicules et obstacles sur le canvas.
 
-    Tu peux tester ici : https://matheuslrsouza.github.io/particle-filter-js/
+- **Application de Comportements**
 
-Pour algo génétique :
+  - Applique dynamiquement les comportements sélectionnés à chaque véhicule.
+  - Les comportements disponibles incluent : Flee, Seek, Arrival, Wander, Obstacle avoidance, Bordures, Evade, Pursue, Separation.
 
-    Regarder le livre The Nature of Code 2, chapitre sur les algos génétiques (chapitre 9): https://thecodingtrain.com/tracks/the-nature-of-code-2 
-    Regarder coding challenge sur flappy bird neuroevolutif https://www.youtube.com/watch?v=c6y21FkaUqw
-    Regarder video sur véhicules qui suivent la piste : https://www.youtube.com/watch?v=mXDrH0wStHs
+- **Personnalisation des Comportements**
+
+  - Les utilisateurs peuvent ajuster les paramètres de chaque comportement via une interface utilisateur dédiée.
+
+- **Architecture Orientée Objet**
+  - Utilisation de classes pour chaque type de comportement, favorisant l'encapsulation et la réutilisation.
+
+## Fonction Debug des Comportements
+
+La fonction debug est une fonctionnalité clé qui permet de visualiser et de comprendre plus en détail les comportements appliqués aux véhicules dans cette simulation. Elle est utilisée pour afficher des informations visuelles supplémentaires directement sur le canevas, ce qui aide à analyser le fonctionnement des comportements en temps réel.
+Exemple de Fonction Debug
+
+Voici un exemple illustrant comment la fonction debug peut être implémentée pour un comportement spécifique, comme Flee (Fuir) :
+
+```
+drawDebug(entity) {
+// Dessine une ligne entre la position de la cible et la position de l'entité
+stroke(255, 0, 0); // Rouge
+line(this.target.pos.x, this.target.pos.y, entity.pos.x, entity.pos.y);
+
+// Dessine un cercle autour de la cible pour indiquer la zone d'action du comportement
+noFill();
+stroke(255, 0, 0, 100); // Rouge avec transparence
+ellipse(this.target.pos.x, this.target.pos.y, 20);
+
+// Dessine une ligne représentant la direction dans laquelle l'entité fuit par rapport à la cible
+let fleeingDirection = p5.Vector.sub(entity.pos, this.target.pos);
+fleeingDirection.setMag(30);
+stroke(0, 255, 0); // Vert
+line(
+entity.pos.x,
+entity.pos.y,
+entity.pos.x + fleeingDirection.x,
+entity.pos.y + fleeingDirection.y
+);
+}
+```
+
+Explication de l'Exemple
+
+    Ligne de la Cible : Dessine une ligne rouge entre la position de la cible et la position de l'entité pour visualiser la direction de la fuite.
+
+    Zone d'Action : Dessine un cercle rouge semi-transparent autour de la cible pour montrer la zone d'action du comportement de fuite.
+
+    Direction de Fuite : Trace une ligne verte à partir de l'entité dans la direction opposée à la cible, indiquant ainsi la direction dans laquelle l'entité tente de s'éloigner de la cible.
+
+Utilisation et Avantages
+
+La fonction debug permet aux développeurs et aux utilisateurs de comprendre visuellement comment chaque comportement affecte le mouvement des véhicules dans la simulation. Cela facilite le débogage, l'optimisation et la compréhension des interactions complexes entre les comportements appliqués.
+
+## Comment Utiliser
+
+1. **Ajout de Comportements**
+
+   - Sélectionnez un comportement dans la liste déroulante pour l'ajouter à la simulation.
+   - Les comportements peuvent être retirés à tout moment en cliquant sur le bouton "Remove" à côté de chaque comportement affiché.
+
+2. **Contrôles de Simulation**
+
+   - Utilisez le bouton "Pause/Resume" pour interrompre ou reprendre la simulation.
+   - Les sliders permettent de modifier la vitesse maximale et la force maximale des véhicules en temps réel.
+
+3. **Types de Cibles**
+   - Différents types de cibles sont disponibles pour chaque comportement : cible fixe, cible errante et cible souris.
+   - Ces cibles peuvent être sélectionnées et ajustées pour observer différentes interactions.
+
+## Développement Futur
+
+Ce projet est évolutif et prévoit d'ajouter les fonctionnalités suivantes à l'avenir :
+
+- **Groupes de Véhicules**
+
+  - Possibilité d'appliquer des comportements différents à des groupes distincts de véhicules.
+
+- **Interface Utilisateur Améliorée**
+
+  - Amélioration de l'interface utilisateur pour une expérience plus intuitive et interactive.
+
+- **Visualisation Avancée**
+  - Intégration de visualisations avancées pour une meilleure compréhension des interactions entre les comportements.
+
+## Exemple de Code
+
+L'application utilise une architecture basée sur des classes pour gérer les "steering behaviors", rendant le code flexible et facile à étendre. Voici un exemple de code illustrant l'application d'un comportement Arrival :
+
+```javascript
+// Exemple de code pour le comportement Arrival
+class ArrivalB {
+  constructor(target, distance = 100, slowdown = 0.2) {
+    this.target = target;
+    this.magnitude = 1;
+    this.distance = distance;
+    this.slowdown = slowdown;
+    // Autres paramètres et méthodes...
+  }
+
+  calculateForce(entity) {
+    // Calcul de la force appliquée à l'entité
+  }
+
+  draw() {
+    // Dessine la cible sur le canvas
+  }
+
+  // Autres méthodes de visualisation et d'interface utilisateur...
+}
+```
