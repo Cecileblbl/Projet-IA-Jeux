@@ -12,7 +12,7 @@ function preload() {
 
 function setup() {
   // Create a canvas and append it to a div with id "p5-canvas"
-  let canvas = createCanvas(800, 500);
+  let canvas = createCanvas(windowWidth, windowHeight);
 
   // Use the parent method to attach the canvas to the existing div with id "p5-canvas"
   canvas.parent("p5-canvas");
@@ -30,11 +30,10 @@ function setup() {
 
   obstacles.push(new Obstacle(100, 100, 50));
 
-  //Wander behaviour on init
+  // Wander behaviour on init
   Bkeeper.addB("wander");
   Bkeeper.addB("obstacleAvoidance");
   Bkeeper.addB("Bordures");
-  Bkeeper.addB("pursue");
   displayBs(Bkeeper.Bs);
 }
 
@@ -63,4 +62,18 @@ function addVehicule() {
 function addObstacle() {
   let obstacle = new Obstacle(random(width), random(height), random(10, 50));
   obstacles.push(obstacle);
+}
+
+function windowResized() {
+  console.log("canvas resized");
+  resizeCanvas(windowWidth, windowHeight);
+  // Find and update the Bordures instance
+  const borduresInstance = findBorduresInstance(Bkeeper.Bs);
+  if (borduresInstance) {
+    borduresInstance.updateDimensions(windowWidth, windowHeight);
+  }
+}
+
+function findBorduresInstance(behaviors) {
+  return behaviors.find((behavior) => behavior instanceof Bordures);
 }

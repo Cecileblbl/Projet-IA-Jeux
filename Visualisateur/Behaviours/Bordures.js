@@ -6,8 +6,8 @@ class Bordures {
     this.y = y || 0;
 
     // Zone dimensions
-    this.width = width || 0;
-    this.height = height || 0;
+    this.width = width || windowWidth || 0;
+    this.height = height || windowHeight || 0;
 
     // Distance from canvas edges
     this.bufferDistanceX = bufferDistanceX || 0;
@@ -16,6 +16,12 @@ class Bordures {
     // Optional properties (not used in provided methods)
     this.magnitude = 1;
     this.debug = false;
+  }
+
+  // Update dimensions
+  updateDimensions(width, height) {
+    this.width = width;
+    this.height = height;
   }
 
   // Calculates a force to steer an entity away from the zone boundaries
