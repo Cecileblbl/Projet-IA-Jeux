@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Visualisateur de comportements</title>
+    <link rel="stylesheet" type="text/css" href="style.css" />
+    <script src="libraries/p5.min.js"></script>
+    <script src="libraries/p5.sound.min.js"></script>
+  </head>
+  <body>
+    <input type="checkbox" id="nav-toggle" />
+    <div id="left-menu">
+      <div id="nav-header">
+        <div id="nav-title">Visualisateur</div>
+        <label for="nav-toggle">
+          <div id="nav-toggle-burger"></div>
+        </label>
+      </div>
+      <select id="BOptions">
+        <option value="none" selected>Ajouter un comportement</option>
+        <option value="flee">Flee</option>
+        <option value="seek">Seek</option>
+        <option value="arrival">Arrival</option>
+        <option value="wander">Wander</option>
+        <option value="obstacleAvoidance">Obstacle avoidance</option>
+        <option value="Bordures">Bordures</option>
+        <option value="evade">Evade</option>
+        <option value="pursue">pursue</option>
+        <option value="separation">separation</option>
+      </select>
+      <div id="B-info"></div>
+    </div>
+    <div id="p5-canvas">
+      <!-- p5.js will draw the canvas here -->
+    </div>
+    <div id="right-menu">
+      <div id="nav-header">
+        <div id="nav-title">Controls</div>
+        <label for="nav-toggle">
+          <div id="nav-toggle-burger"></div>
+        </label>
+      </div>
+      <div id="data"></div>
+      <button id="pauseButton">Pause</button>
+      <div id="datainputs"></div>
+      <div id="vehicles">
+        <h3>Vehicules</h3>
+        <input type="number" id="vehicleNumber" />
+        <button id="addVehicule">Add vehicule</button>
+        <button id="removeVehicule">Remove vehicule</button>
+        <button id="clearVehicules">Clear vehicules</button>
+      </div>
+      <div id="obstacle"></div>
+      <h3>Obstacles</h3>
+      <input type="number" id="obstacleNumber" />
+      <button id="addObstacle">Add obstacle</button>
+      <button id="removeObstacle">Remove obstacle</button>
+      <button id="clearObstacles">Clear obstacles</button>
+    </div>
+    <script src="Bmanager.js"></script>
+    <script src="Bkeeper.js"></script>
+    <script src="sketch.js"></script>
+    <script src="script.js"></script>
+    <script src="Behaviours/arrivalB.js"></script>
+    <script src="Behaviours/fleeB.js"></script>
+    <script src="Behaviours/seekB.js"></script>
+    <script src="Behaviours/wanderB.js"></script>
+    <script src="Behaviours/ObstacleavoidanceB.js"></script>
+    <script src="Behaviours/Bordures.js"></script>
+    <script src="Behaviours/EvadeB.js"></script>
+    <script src="Behaviours/pursueB.js"></script>
+    <script src="Behaviours/SeparationB.js"></script>
+    <script src="vehicule.js"></script>
+    <script src="obstacle.js"></script>
+    <script src="Targets/fixedTarget.js"></script>
+    <script src="Targets/Mouse.js"></script>
+  </body>
+</html>
