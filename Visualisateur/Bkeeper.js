@@ -8,6 +8,9 @@ class Bkeeper {
     if (B === "seek") {
       this.Bs.push(new SeekB(new Target((width / 2, height / 2))));
     }
+    if (B === "separation") {
+      this.Bs.push(new SeparationB());
+    }
     if (B === "arrival") {
       this.Bs.push(new ArrivalB(new fixedTarget()));
     }

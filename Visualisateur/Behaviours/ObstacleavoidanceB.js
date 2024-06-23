@@ -155,21 +155,6 @@ class ObstacleAvoidanceB {
       })
     );
 
-    const debugButton = document.createElement("button");
-    debugButton.textContent = "Activate Debug";
-    debugButton.style.backgroundColor = "#4a90e2";
-    debugButton.style.color = "white";
-
-    debugButton.addEventListener("click", () => {
-      this.debug = !this.debug;
-      debugButton.textContent = this.debug
-        ? "Deactivate Debug"
-        : "Activate Debug";
-      debugButton.style.backgroundColor = this.debug ? "#d62929" : "#4a90e2";
-    });
-
-    behaviorDiv.appendChild(debugButton);
-
     parentElement.appendChild(behaviorDiv);
   }
 }

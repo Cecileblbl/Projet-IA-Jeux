@@ -3,18 +3,13 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
     <title>Visualisateur de comportements</title>
-
     <link rel="stylesheet" type="text/css" href="style.css" />
-
     <script src="libraries/p5.min.js"></script>
     <script src="libraries/p5.sound.min.js"></script>
   </head>
-
   <body>
     <input type="checkbox" id="nav-toggle" />
-
     <div id="left-menu">
       <div id="nav-header">
         <div id="nav-title">Visualisateur</div>
@@ -32,14 +27,13 @@
         <option value="Bordures">Bordures</option>
         <option value="evade">Evade</option>
         <option value="pursue">pursue</option>
+        <option value="separation">separation</option>
       </select>
       <div id="B-info"></div>
     </div>
-
     <div id="p5-canvas">
       <!-- p5.js will draw the canvas here -->
     </div>
-
     <div id="right-menu">
       <div id="nav-header">
         <div id="nav-title">Controls</div>
@@ -51,18 +45,35 @@
       <button id="pauseButton">Pause</button>
       <div id="datainputs">
         <label for="maxSpeed">Vitesse maximale :</label>
-        <input type="number" id="maxSpeed" value="1" />
+        <input
+          type="range"
+          id="maxSpeed"
+          value="1"
+          min="0"
+          max="10"
+          step="0.1"
+          class="rs-range"
+        />
+        <span id="maxSpeedLabel" class="rs-label">1</span>
         <label for="maxForce">Force maximale :</label>
-        <input type="number" id="maxForce" value="0.2" step="0.1" />
+        <input
+          type="range"
+          id="maxForce"
+          value="0.2"
+          min="0"
+          max="2"
+          step="0.1"
+          class="rs-range"
+        />
+        <span id="maxForceLabel" class="rs-label">0.2</span>
       </div>
-      <div id=" vehicles">
+      <div id="vehicles">
         <h3>Vehicules</h3>
         <input type="number" id="vehicleNumber" />
         <button id="addVehicule">Add vehicule</button>
         <button id="removeVehicule">Remove vehicule</button>
         <button id="clearVehicules">Clear vehicules</button>
       </div>
-
       <div id="obstacle"></div>
       <h3>Obstacles</h3>
       <input type="number" id="obstacleNumber" />
@@ -70,7 +81,6 @@
       <button id="removeObstacle">Remove obstacle</button>
       <button id="clearObstacles">Clear obstacles</button>
     </div>
-
     <script src="Bmanager.js"></script>
     <script src="Bkeeper.js"></script>
     <script src="sketch.js"></script>
@@ -83,6 +93,7 @@
     <script src="Behaviours/Bordures.js"></script>
     <script src="Behaviours/EvadeB.js"></script>
     <script src="Behaviours/pursueB.js"></script>
+    <script src="Behaviours/SeparationB.js"></script>
     <script src="vehicule.js"></script>
     <script src="obstacle.js"></script>
     <script src="Targets/fixedTarget.js"></script>
