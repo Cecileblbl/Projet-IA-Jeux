@@ -1,5 +1,6 @@
+/* Global Styles */
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Roboto', sans-serif;
     background-color: #e0f7fa;
     margin: 0;
     display: flex;
@@ -17,8 +18,9 @@ header.toolbar {
 }
 
 .toolbar .logo {
-    font-size: 1.5em;
+    font-size: 2em;
     font-weight: bold;
+    letter-spacing: 1.5px;
 }
 
 .container {
@@ -27,7 +29,7 @@ header.toolbar {
 }
 
 .sidenav {
-    width: 200px;
+    width: 220px;
     background-color: #004d40;
     color: white;
     padding-top: 20px;
@@ -35,11 +37,19 @@ header.toolbar {
     display: flex;
     flex-direction: column;
     align-items: center;
+    text-align: center;
+}
+
+.sidenav h3 {
+    margin-bottom: 20px;
+    font-size: 1.5em;
+    font-weight: bold;
+    text-transform: uppercase;
 }
 
 .sidenav button {
     display: block;
-    width: 80%;
+    width: 90%;
     padding: 10px 20px;
     margin: 10px 0;
     border: none;
@@ -47,13 +57,14 @@ header.toolbar {
     color: white;
     border-radius: 5px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
-    font-size: 14px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    font-size: 1em;
     text-align: center;
 }
 
 .sidenav button:hover {
     background-color: #004d40;
+    transform: translateY(-2px);
 }
 
 .main-content {
@@ -64,6 +75,17 @@ header.toolbar {
     align-items: center;
     justify-content: center;
     position: relative;
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+.behavior-title {
+    font-size: 1.8em;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #00796b;
+    text-align: center;
 }
 
 #sliders {
@@ -71,11 +93,16 @@ header.toolbar {
     flex-direction: column;
     align-items: center;
     margin-bottom: 20px;
+    background-color: #fafafa;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 #sliders label {
-    margin: 5px 0;
-    font-size: 14px;
+    margin: 10px 0;
+    font-size: 1em;
+    color: #00796b;
 }
 
 #sliders input[type="range"] {
@@ -87,9 +114,17 @@ canvas {
     width: 100%;
     height: 100%;
     display: none;
-    border: 1px solid #ccc;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 canvas.active {
     display: block;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
 }

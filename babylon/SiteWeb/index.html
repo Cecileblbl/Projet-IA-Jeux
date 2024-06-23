@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Steering Behaviors</title>
     <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
 <header class="toolbar">
@@ -13,18 +14,19 @@
 <div class="container">
     <nav class="sidenav">
         <h3>Behaviors BabylonJS</h3>
-        <button data-behavior="1">Comportement Arrival</button>
-        <button data-behavior="2">Comportement Boids</button>
-        <button data-behavior="3">Comportement Obstacle Avoid</button>
-        <button data-behavior="4">Comportement Path Follow</button>
-        <button data-behavior="5">Comportement Path Follow Complex</button>
-        <button data-behavior="6">Comportement Scalar Projection</button>
-        <button data-behavior="7">Comportement Pursue Evade</button>
-        <button data-behavior="8">Comportement Seek</button>
-        <button data-behavior="9">Comportement Wander</button>
-        <button data-behavior="10">Comportement A*</button>
+        <button data-behavior="1" data-title="Comportement Arrival">Comportement Arrival</button>
+        <button data-behavior="2" data-title="Comportement Boids">Comportement Boids</button>
+        <button data-behavior="3" data-title="Comportement Obstacle Avoid">Comportement Obstacle Avoid</button>
+        <button data-behavior="4" data-title="Comportement Path Follow">Comportement Path Follow</button>
+        <button data-behavior="5" data-title="Comportement Path Follow Complex">Comportement Path Follow Complex</button>
+        <button data-behavior="6" data-title="Comportement Scalar Projection">Comportement Scalar Projection</button>
+        <button data-behavior="7" data-title="Comportement Pursue Evade">Comportement Pursue Evade</button>
+        <button data-behavior="8" data-title="Comportement Seek">Comportement Seek</button>
+        <button data-behavior="9" data-title="Comportement Wander">Comportement Wander</button>
+        <button data-behavior="10" data-title="Comportement A*">Comportement A*</button>
     </nav>
     <div class="main-content">
+        <div id="behaviorTitle" class="behavior-title"></div>
         <div id="sliders">
             <label for="alignSlider">Alignement</label>
             <input type="range" id="alignSlider" name="alignSlider" min="0" max="5" step="0.1" value="1">
@@ -59,7 +61,7 @@
 <script src="AStar.js"></script>
 
 <script>
-    function showCanvas(canvasId) {
+    function showCanvas(canvasId, title) {
         document.querySelectorAll('canvas').forEach(canvas => {
             canvas.classList.remove('active');
         });
@@ -81,6 +83,10 @@
             if (behavior && window[behavior]) {
                 window[behavior]();
             }
+
+            // Update the behavior title
+            const behaviorTitle = document.getElementById('behaviorTitle');
+            behaviorTitle.textContent = title;
         } else {
             console.error('No canvas found with id:', 'canvas' + canvasId);
         }
@@ -89,10 +95,15 @@
     document.querySelectorAll('.sidenav button').forEach(button => {
         button.addEventListener('click', (event) => {
             const behavior = button.getAttribute('data-behavior');
+            const title = button.getAttribute('data-title');
             if (behavior) {
-                showCanvas(behavior);
+                showCanvas(behavior, title);
             }
         });
+    });
+
+    window.addEventListener("load", () => {
+        showCanvas('1', 'Comportement Arrival');
     });
 </script>
 </body>
